@@ -1,0 +1,594 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Model Dropdown — "Terminal Luxe" instrument picker.
+
+   Monochrome ink surface, one phosphor accent used to *light up* the active
+   model (glowing filament rail, un-greyed provider glyph, spring-in check).
+   Keyboard focus rides its own ink rail so selection and cursor never blur
+   into one another. Mono-caps group headers, capability chips, and a kbd
+   hint footer complete the developer-instrument feel.
+   ────────────────────────────────────────────────────────────────────────── */
+.picker-dropdown {
+  display: flex;
+  flex-direction: column;
+
+  /* ── Search field ─────────────────────────────────────── */
+  .picker-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 0.75rem;
+    border-bottom: 1px solid var(--pintra-border-subtle);
+    flex-shrink: 0;
+    position: relative;
+    transition: box-shadow var(--pintra-transition-fast) var(--pintra-ease-out);
+
+    .picker-search-icon {
+      color: var(--pintra-muted);
+      flex-shrink: 0;
+      transition: color var(--pintra-transition-fast) var(--pintra-ease-out);
+    }
+
+    &:focus-within .picker-search-icon {
+      color: var(--pintra-accent-strong);
+    }
+
+    .picker-search-input {
+      flex: 1 1 0%;
+      border: none;
+      background-color: transparent;
+      color: var(--pintra-fg);
+      font-family: var(--pintra-font);
+      font-size: 0.94em;
+      letter-spacing: var(--pintra-tracking-tight);
+      padding: 0;
+      outline: none;
+      box-shadow: none;
+
+      &::placeholder {
+        color: var(--pintra-muted);
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: none;
+        border: none;
+      }
+    }
+
+    /* Live result count */
+    .picker-count {
+      flex: 0 0 auto;
+      min-width: 1.4em;
+      padding: 2px 7px;
+      border-radius: var(--pintra-radius-pill);
+      background: var(--pintra-surface-subtle);
+      color: var(--pintra-fg-muted);
+      font-family: var(--pintra-monospace);
+      font-variation-settings: 'MONO' 1;
+      font-size: 0.68em;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: center;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  }
+
+  /* ── Model list ───────────────────────────────────────── */
+  .picker-list {
+    overflow-y: auto;
+    max-height: 300px;
+    padding-bottom: 0.3rem;
+
+    &.picker-scroll-host {
+      position: relative;
+    }
+
+    &.picker-scroll-top {
+      box-shadow: inset 0 13px 14px -14px #0000001f;
+    }
+
+    &.picker-scroll-bot {
+      box-shadow: inset 0 -13px 14px -14px #0000001f;
+    }
+
+    &.picker-scroll-top.picker-scroll-bot {
+      box-shadow:
+        inset 0 13px 14px -14px #00000029,
+        inset 0 -13px 14px -14px #00000029;
+    }
+
+    /* ── Group header ───────────────────────────────────── */
+    .picker-group-hdr {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.875rem 0.4rem;
+      font-family: var(--pintra-monospace);
+      font-variation-settings: 'MONO' 1;
+      font-size: 0.64em;
+      font-weight: 700;
+      color: var(--pintra-fg-muted);
+      text-transform: uppercase;
+      letter-spacing: var(--pintra-tracking-caps);
+      -webkit-user-select: none;
+      user-select: none;
+      background: linear-gradient(to bottom,
+          var(--pintra-menu-bg) 62%,
+          color-mix(in srgb, var(--pintra-menu-bg) 0%, transparent));
+
+      .picker-group-tick {
+        width: 8px;
+        height: 2px;
+        flex: 0 0 auto;
+        border-radius: var(--pintra-radius-pill);
+        background: var(--pintra-accent);
+        box-shadow: 0 0 6px var(--pintra-accent-glow);
+      }
+
+      .picker-group-name {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .picker-group-count {
+        flex: 0 0 auto;
+        min-width: 1.35em;
+        padding: 1px 6px;
+        border-radius: var(--pintra-radius-pill);
+        background: color-mix(in srgb, var(--pintra-fg) 8%, transparent);
+        color: var(--pintra-fg-muted);
+        font-size: 0.92em;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-align: center;
+      }
+    }
+
+    /* ── Model row ──────────────────────────────────────── */
+    .picker-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin: 1px 0.375rem;
+      padding: 6px 8px 6px 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: var(--pintra-radius-sm);
+      min-width: 0;
+      color: var(--pintra-fg);
+      transition:
+        background-color var(--pintra-transition-fast) var(--pintra-ease-out),
+        border-color var(--pintra-transition-fast) var(--pintra-ease-out),
+        color var(--pintra-transition-fast) var(--pintra-ease-out);
+      animation: model-item-in 0.26s var(--pintra-ease-out) both;
+      animation-delay: calc(min(var(--i, 0), 14) * 14ms);
+
+      /* Provider glyph well */
+      .picker-item-glyph {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        flex: 0 0 auto;
+        border-radius: var(--pintra-radius-xs);
+        background: color-mix(in srgb, var(--pintra-fg) 5%, transparent);
+        color: var(--pintra-fg-muted);
+        transition:
+          background var(--pintra-transition-fast) var(--pintra-ease-out),
+          color var(--pintra-transition-fast) var(--pintra-ease-out),
+          box-shadow var(--pintra-transition-fast) var(--pintra-ease-out);
+
+        .topbar-provider-icon {
+          transition: filter var(--pintra-transition) var(--pintra-ease-out);
+        }
+      }
+
+      .picker-item-name {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--pintra-fg);
+        font-size: 0.92em;
+        transition:
+          color var(--pintra-transition-fast) var(--pintra-ease-out),
+          font-weight var(--pintra-transition-fast) var(--pintra-ease-out);
+      }
+
+      /* Capability chips */
+      .picker-item-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        flex: 0 0 auto;
+      }
+
+      .picker-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        height: 17px;
+        padding: 0 6px;
+        border-radius: var(--pintra-radius-xs);
+        border: 1px solid var(--pintra-hairline);
+        background: color-mix(in srgb, var(--pintra-fg) 4%, transparent);
+        color: var(--pintra-fg-muted);
+        font-family: var(--pintra-monospace);
+        font-variation-settings: 'MONO' 1;
+        font-size: 0.64em;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        transition:
+          color var(--pintra-transition-fast) var(--pintra-ease-out),
+          border-color var(--pintra-transition-fast) var(--pintra-ease-out),
+          background var(--pintra-transition-fast) var(--pintra-ease-out);
+      }
+
+      .picker-chip-reason {
+        width: 17px;
+        padding: 0;
+        color: var(--pintra-muted);
+
+        .pi-icon,
+        svg {
+          width: 11px;
+          height: 11px;
+        }
+      }
+
+      /* Hover — soft ink raise */
+      &:hover {
+        background-color: var(--pintra-surface-raise);
+
+        .picker-item-glyph {
+          background: color-mix(in srgb, var(--pintra-fg) 9%, transparent);
+        }
+      }
+
+      /* Keyboard focus (not the selected model) — ink cursor rail */
+      &.focused:not(.active) {
+        background-color: var(--pintra-surface-hover);
+        border-color: color-mix(in srgb, var(--pintra-fg) 20%, transparent);
+
+        .picker-item-name {
+          font-weight: 600;
+        }
+      }
+
+      /* Active — the selected model, lit in phosphor */
+      &.active {
+        background: color-mix(in srgb, var(--pintra-accent) 11%, transparent);
+
+        .picker-item-glyph {
+          background: var(--pintra-accent-faint);
+          color: var(--pintra-accent-strong);
+          box-shadow:
+            0 0 0 1px var(--pintra-accent-line),
+            0 0 10px var(--pintra-accent-glow-soft);
+
+          /* Ignite the provider mark in phosphor (defeat the theme's grayscale) */
+          .topbar-provider-icon {
+            filter: grayscale(0);
+          }
+        }
+
+        .picker-item-name {
+          font-weight: 650;
+          color: var(--pintra-accent-strong);
+        }
+
+        .picker-chip {
+          border-color: var(--pintra-accent-line);
+          color: var(--pintra-accent-strong);
+          background: var(--pintra-accent-faint);
+        }
+      }
+
+      /* Active *and* keyboard-focused — firmer accent frame */
+      &.active.focused {
+        background: color-mix(in srgb, var(--pintra-accent) 15%, transparent);
+        border-color: color-mix(in srgb,
+            var(--pintra-accent) 55%,
+            var(--pintra-border));
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--pintra-focus-halo);
+      }
+    }
+
+    /* ── Empty state ────────────────────────────────────── */
+    .picker-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 2rem 1.25rem;
+      text-align: center;
+
+      .picker-empty-icon {
+        color: var(--pintra-fg-faint);
+        margin-bottom: 0.125rem;
+      }
+
+      .picker-empty-title {
+        color: var(--pintra-fg-muted);
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+
+      .picker-empty-sub {
+        color: var(--pintra-muted);
+        font-size: 0.8em;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  /* ── Keyboard hint footer ─────────────────────────────── */
+  .picker-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--pintra-border-subtle);
+    background: color-mix(in srgb, var(--pintra-fg) 2.5%, transparent);
+    -webkit-user-select: none;
+    user-select: none;
+
+    .picker-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--pintra-muted);
+      font-size: 0.68em;
+      font-weight: 500;
+      letter-spacing: var(--pintra-tracking-tight);
+      white-space: nowrap;
+    }
+
+    .picker-hint-end {
+      margin-left: auto;
+    }
+
+    .picker-kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: var(--pintra-radius-xs);
+      border: 1px solid var(--pintra-hairline);
+      border-bottom-width: 2px;
+      background: var(--pintra-surface-subtle);
+      color: var(--pintra-fg-muted);
+      font-family: var(--pintra-monospace);
+      font-variation-settings: 'MONO' 1;
+      font-size: 0.9em;
+      line-height: 1;
+    }
+  }
+}
+
+/* Fuzzy match highlight */
+.picker-item-name .fuzzy-hl {
+  padding: 0;
+  border-radius: 0.125rem;
+  color: var(--pintra-accent-strong);
+  font-weight: 700;
+  background: var(--pintra-accent-faint);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--pintra-accent) 16%, transparent);
+}
+
+.picker-item.active .picker-item-name .fuzzy-hl {
+  background: transparent;
+  box-shadow: none;
+  text-decoration: underline;
+  text-decoration-color: var(--pintra-accent-line);
+  text-underline-offset: 3px;
+}
+
+@keyframes model-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Model Info Hover Card — mirrors the row's language: glyph + heading, a
+   compact spec sheet, and a subtle right-click hint.
+   ────────────────────────────────────────────────────────────────────────── */
+.picker-hover-card {
+  min-width: 200px;
+  padding: 0.75rem 0.875rem;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.picker-hover-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.625rem;
+  margin-bottom: 0.625rem;
+  border-bottom: 1px solid var(--pintra-border-subtle);
+}
+
+.picker-hover-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: var(--pintra-radius-sm);
+  background: var(--pintra-accent-faint);
+  color: var(--pintra-accent-strong);
+  box-shadow: 0 0 0 1px var(--pintra-accent-line);
+
+  .topbar-provider-icon {
+    filter: grayscale(0);
+  }
+}
+
+.picker-hover-heading {
+  min-width: 0;
+}
+
+.picker-hover-title {
+  font-size: 0.92em;
+  font-weight: 600;
+  color: var(--pintra-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.picker-hover-sub {
+  font-family: var(--pintra-monospace);
+  font-variation-settings: 'MONO' 1;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: var(--pintra-tracking-wide);
+  text-transform: uppercase;
+  color: var(--pintra-fg-faint);
+  margin-top: 2px;
+}
+
+.picker-hover-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.picker-hover-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  font-size: 0.82em;
+
+  dt {
+    color: var(--pintra-muted);
+    white-space: nowrap;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--pintra-fg);
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+.picker-hover-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.picker-hover-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--pintra-radius-pill);
+}
+
+.picker-hover-flag.on .picker-hover-dot {
+  background: var(--pintra-accent);
+  box-shadow: 0 0 6px var(--pintra-accent-glow);
+}
+
+.picker-hover-flag.off {
+  color: var(--pintra-muted);
+  font-weight: 500;
+}
+
+.picker-hover-flag.off .picker-hover-dot {
+  background: color-mix(in srgb, var(--pintra-fg) 22%, transparent);
+}
+
+.picker-hover-foot {
+  margin-top: 0.625rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--pintra-border-subtle);
+  font-size: 0.72em;
+  font-style: italic;
+  color: var(--pintra-muted);
+  text-align: center;
+}
+
+/* Login prompt shown in place of the picker when no models are available. */
+.picker-login-hover {
+  .picker-login-card {
+    min-width: 200px;
+    max-width: 260px;
+    padding: 0.625rem 0.75rem;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .picker-login-title {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--pintra-fg);
+  }
+
+  .picker-login-sub {
+    margin-top: 4px;
+    font-size: 0.78em;
+    line-height: 1.4;
+    font-style: italic;
+    color: var(--pintra-muted);
+  }
+}
+
+/* ── Dark / high-contrast tuning ──────────────────────────── */
+body[data-vscode-theme-kind*='dark'],
+body[data-vscode-theme-kind*='high-contrast'] {
+  .picker-dropdown {
+    .picker-list.picker-scroll-top {
+      box-shadow: inset 0 13px 14px -14px #00000038;
+    }
+
+    .picker-list.picker-scroll-bot {
+      box-shadow: inset 0 -13px 14px -14px #00000038;
+    }
+
+    .picker-list.picker-scroll-top.picker-scroll-bot {
+      box-shadow:
+        inset 0 13px 14px -14px #00000047,
+        inset 0 -13px 14px -14px #00000047;
+    }
+  }
+
+  .picker-item-name .fuzzy-hl {
+    background: color-mix(in srgb, var(--pintra-accent) 20%, transparent);
+  }
+}

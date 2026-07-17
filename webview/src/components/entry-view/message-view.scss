@@ -1,0 +1,287 @@
+.entry {
+  display: block;
+  line-height: 1.7;
+  margin: calc(var(--pintra-space-lg) * var(--pintra-spacing-mult)) 0;
+  padding-top: 10px;
+}
+
+.entry.entry-in {
+  animation: entry-in 0.34s var(--pintra-ease-out) both;
+}
+
+.entry.user-entry.entry-in .entry-bubble {
+  animation: bubble-in 0.28s ease-out both;
+}
+
+@keyframes entry-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.entry-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  position: relative;
+}
+
+/* System turns — a quiet left rule anchors them in the transcript. */
+.entry:not(.agent-entry):not(.user-entry)>.entry-body {
+  padding-left: 12px;
+  border-left: 2px solid var(--pintra-border-subtle);
+}
+
+/* User turns — a full-width bubble sets your input apart. */
+.entry.user-entry .entry-content {
+  max-width: 100%;
+}
+
+/* The current user turn pins to the top of the transcript while its reply
+   streams in below; the next user turn pushes it out of view (native sticky
+   stacking — no JS). z-index lifts it above the answer scrolling underneath. */
+.entry.user-entry {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Full-width backdrop so the answer dissolves as it scrolls beneath the pinned
+   bubble instead of bleeding past it (through the actions row above it or the
+   gap beside it). It rides with the sticky entry; the negative offsets reach
+   over #chat-log's padding, and the masked lower edge softens the seam.
+   Invisible in normal flow — it matches the bg. */
+.entry.user-entry::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: calc(-8px * var(--pintra-spacing-mult));
+  left: -16px;
+  right: -16px;
+  /* Extend past the bubble so the whole bubble row stays fully opaque and the
+     dissolve happens in the gap below it — otherwise the fade lands beside a
+     short bubble and the answer ghosts through next to it. */
+  bottom: -24px;
+  background: var(--pintra-bg);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom,
+      #000 calc(100% - 18px),
+      transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 18px), transparent);
+}
+
+.entry-bubble {
+  position: relative;
+  padding: 8px 14px;
+  /* VS Code's input tokens — a designed fg/bg pair, so contrast holds in every
+     theme: white-ish on light themes, an elevated dark surface on dark ones. */
+  color: var(--vscode-input-foreground, var(--pintra-fg));
+  background: var(--vscode-input-background, var(--pintra-surface-subtle));
+  border: 1px solid var(--pintra-border-subtle);
+  /* Rounded, with the bottom-right corner tucked — a chat-bubble tell. */
+  border-radius: var(--pintra-radius-lg);
+  box-shadow: var(--pintra-shadow-sm);
+}
+
+/* Keep prose snug against the bubble edges. */
+.entry-bubble .entry-content-md>*:first-child {
+  margin-top: 0;
+}
+
+.entry-bubble .entry-content-md>*:last-child {
+  margin-bottom: 0;
+}
+
+/* Hover toolbar — timestamp + copy + branch. Floats in the bubble's
+   bottom-right, revealed only on bubble hover. Absolute, so it never reserves
+   space or shifts the layout; its bubble-matched background masks any message
+   text it happens to overlap. */
+.entry-actions {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  border-radius: var(--pintra-radius-pill);
+  background: var(--vscode-input-background, var(--pintra-surface-subtle));
+  box-shadow:
+    0 0 0 1px var(--pintra-border-subtle),
+    var(--pintra-shadow-sm);
+  opacity: 0;
+  transform: translateY(2px);
+  pointer-events: none;
+  transition:
+    opacity var(--pintra-transition-fast) var(--pintra-ease-out),
+    transform var(--pintra-transition-fast) var(--pintra-ease-out);
+}
+
+.entry-bubble:hover .entry-actions,
+.entry-bubble:focus-within .entry-actions,
+.entry-actions:has(.is-copied) {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.entry-time {
+  margin-right: 4px;
+  font-size: 0.72em;
+  font-weight: 600;
+  color: var(--pintra-fg-faint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--pintra-tracking-wide);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Denser than the default sm icon button; quiet until hovered. */
+.btn.entry-action.btn-icon-only {
+  width: 22px;
+  height: 22px;
+  color: var(--pintra-fg-faint);
+}
+
+.btn.entry-action .btn-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.btn.entry-action:hover {
+  color: var(--pintra-fg);
+}
+
+.btn.entry-action.is-copied {
+  color: var(--pintra-accent);
+}
+
+.entry-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68em;
+  font-weight: 650;
+  color: var(--pintra-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--pintra-tracking-caps);
+  white-space: nowrap;
+  font-variation-settings: 'MONO' 1;
+}
+
+/* Phosphor marker — the agent's signature identity. */
+.agent-entry .entry-role {
+  color: color-mix(in srgb, var(--pintra-muted) 60%, var(--pintra-fg));
+}
+
+.agent-entry .entry-role::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: var(--pintra-radius-pill);
+  background: var(--pintra-accent);
+  box-shadow: 0 0 8px var(--pintra-accent-glow);
+  flex-shrink: 0;
+}
+
+@keyframes caret-blink {
+
+  from,
+  46% {
+    opacity: 0.9;
+  }
+
+  60% {
+    opacity: 0.22;
+  }
+
+  100% {
+    opacity: 0.9;
+  }
+}
+
+/* Attachment gallery in user messages */
+.entry-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.entry-attachment {
+  border-radius: var(--pintra-radius-md);
+  overflow: hidden;
+}
+
+.entry-attachment-image {
+  display: block;
+  max-width: 280px;
+  max-height: 200px;
+  border-radius: var(--pintra-radius-md);
+  object-fit: contain;
+  border: 1px solid var(--pintra-border-subtle);
+}
+
+.entry-attachment-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--pintra-surface-secondary);
+  border: 1px solid var(--pintra-border);
+  border-radius: var(--pintra-radius-md);
+  min-width: 160px;
+  max-width: 260px;
+}
+
+.entry-attachment-ext {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--pintra-radius-sm);
+  background: var(--pintra-accent-muted);
+  color: var(--pintra-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.entry-attachment-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.entry-attachment-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pintra-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entry-attachment-size {
+  font-size: 11px;
+  color: var(--pintra-fg-muted);
+}

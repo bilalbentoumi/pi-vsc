@@ -1,0 +1,51 @@
+/* Popover */
+.flyout {
+  position: fixed;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: var(--pintra-z-dropdown);
+  background: var(--pintra-menu-bg);
+  border: 1px solid var(--pintra-menu-border);
+  border-radius: var(--pintra-radius);
+  box-shadow: var(--pintra-menu-shadow);
+}
+
+.flyout--animate {
+  animation: flyout-enter 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.flyout-origin-top {
+  transform-origin: top center;
+}
+
+.flyout-origin-top-left {
+  transform-origin: top left;
+}
+
+.flyout-origin-top-right {
+  transform-origin: top right;
+}
+
+.flyout-origin-bottom {
+  transform-origin: bottom center;
+}
+
+.flyout-origin-bottom-left {
+  transform-origin: bottom left;
+}
+
+.flyout-origin-bottom-right {
+  transform-origin: bottom right;
+}
+
+@keyframes flyout-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--pintra-popover-enter-y)) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

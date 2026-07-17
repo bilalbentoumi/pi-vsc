@@ -1,0 +1,26 @@
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.splash-screen svg {
+  color: var(--pintra-fg);
+  animation: hero-glyph-in 0.6s var(--pintra-ease-out) both;
+}
+
+@keyframes hero-glyph-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

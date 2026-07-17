@@ -1,0 +1,1 @@
+export { InputBar } from './composer';

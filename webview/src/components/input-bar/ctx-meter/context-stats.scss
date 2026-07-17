@@ -1,0 +1,114 @@
+.context-popup-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  padding: 2px;
+  border-radius: var(--pintra-radius-sm);
+  transition: background var(--pintra-transition-fast) var(--pintra-ease-out);
+}
+
+.context-popup-wrapper:hover,
+.context-popup-wrapper:focus-visible {
+  background: var(--pintra-surface-hover);
+}
+
+.ctx-meter-btn {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.ctx-meter-btn span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ctx-meter {
+  width: 18px;
+  height: 18px;
+  overflow: visible;
+  transform: rotate(-90deg);
+  flex: 0 0 auto;
+}
+
+.ctx-meter-track {
+  fill: none;
+  stroke: color-mix(in srgb, var(--pintra-fg) 12%, transparent);
+  stroke-width: 2;
+}
+
+.ctx-meter-fill {
+  fill: none;
+  stroke: var(
+    --ctx-color,
+    color-mix(in srgb, var(--pintra-fg) 72%, transparent)
+  );
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition:
+    stroke-dashoffset 0.35s ease,
+    stroke 0.35s ease;
+}
+
+.ctx-popup-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ctx-popup-row span {
+  color: var(--pintra-muted);
+}
+
+.ctx-popup-row strong {
+  font-weight: 600;
+  color: var(--pintra-fg);
+  white-space: nowrap;
+}
+
+.ctx-popup-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--pintra-border-subtle);
+  border-radius: var(--pintra-radius-sm);
+  background: var(--pintra-surface);
+  color: var(--pintra-fg);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    background var(--pintra-transition-fast) var(--pintra-ease-out),
+    border-color var(--pintra-transition-fast) var(--pintra-ease-out);
+}
+
+.ctx-popup-compact:hover:not(:disabled) {
+  border-color: var(--pintra-accent-line);
+}
+
+.ctx-popup-compact:hover:not(:disabled) {
+  background: var(--pintra-surface-hover);
+}
+
+.ctx-popup-compact:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@keyframes context-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

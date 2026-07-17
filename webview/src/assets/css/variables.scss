@@ -1,0 +1,288 @@
+/**
+ * Design tokens — "Terminal Luxe".
+ *
+ * A premium developer-instrument system: a monochrome ink base derived from
+ * the active VS Code theme, one signature "phosphor" accent used sparingly,
+ * an engineered radius scale, layered tactile elevation, and physics-based
+ * micro-motion. Values map onto VS Code theme variables (with fallbacks) so
+ * surfaces/text track the editor theme; the accent + shape + motion layers
+ * are ours. Component-scoped tokens live in their own stylesheets.
+ */
+
+/**
+ * `color-mix` recipe helper: `blend($base, $pct, $with)` expands to
+ * `color-mix(in srgb, $base $pct, $with)`, `$with` defaulting to transparent.
+ * Keeps the token blocks below to one recipe per line instead of repeating the
+ * `color-mix(in srgb, …)` scaffolding ~30 times. Named `blend` (not `mix`) so
+ * it doesn't shadow Sass's built-in `mix()`. Call sites interpolate it
+ * (`#{blend(…)}`) because Sass leaves custom-property values unevaluated
+ * otherwise.
+ */
+@function blend($base, $pct, $with: transparent) {
+  @return color-mix(in srgb, #{$base} #{$pct}, #{$with});
+}
+
+:root {
+  --pintra-bg: var(
+    --vscode-sideBar-background,
+    var(--vscode-editor-background)
+  );
+  --pintra-panel: var(--vscode-sideBar-background, var(--pintra-bg));
+  --pintra-surface: var(--vscode-editorWidget-background, var(--pintra-bg));
+  --pintra-surface-elevated: var(
+    --vscode-editorWidget-background,
+    var(--pintra-panel)
+  );
+  --pintra-surface-subtle: var(
+    --vscode-editor-inactiveSelectionBackground,
+    #{blend(var(--vscode-panel-border, rgba(128, 128, 128, 0.25)), 24%)}
+  );
+  --pintra-surface-hover: var(
+    --vscode-toolbar-hoverBackground,
+    var(--vscode-list-hoverBackground, var(--pintra-surface-subtle))
+  );
+  --pintra-surface-raise: #{blend(var(--pintra-fg), 5%)};
+
+  --pintra-fg: var(--vscode-foreground, var(--vscode-editor-foreground));
+  --pintra-muted: var(
+    --vscode-descriptionForeground,
+    rgba(128, 128, 128, 0.82)
+  );
+  --pintra-fg-muted: #{blend(var(--pintra-muted), 84%, var(--pintra-fg))};
+  --pintra-fg-faint: #{blend(var(--pintra-muted), 62%)};
+  --pintra-link: var(--pintra-fg);
+
+  --pintra-border: var(--vscode-panel-border, rgba(128, 128, 128, 0.25));
+  --pintra-border-subtle: #{blend(var(--pintra-border), 70%)};
+  --pintra-hairline: #{blend(var(--pintra-border), 52%)};
+  --pintra-border-strong: var(--vscode-widget-border, var(--pintra-border));
+  --pintra-block-border: #{blend(var(--pintra-border-strong), 78%, var(--pintra-fg) 10%)};
+  --pintra-block-divider: #{blend(var(--pintra-block-border), 82%)};
+
+  --pintra-input-bg: var(--vscode-input-background);
+  --pintra-input-border: var(--vscode-input-border, rgba(128, 128, 128, 0.3));
+
+  --pintra-accent: #10a37f;
+  --pintra-accent-strong: #{blend(var(--pintra-accent), 82%, var(--pintra-fg))};
+  --pintra-accent-soft: #{blend(var(--pintra-accent), 15%, var(--pintra-surface))};
+  --pintra-accent-faint: #{blend(var(--pintra-accent), 12%)};
+  --pintra-accent-line: #{blend(var(--pintra-accent), 42%, var(--pintra-border))};
+  --pintra-accent-contrast: #04140f;
+  --pintra-accent-glow: #{blend(var(--pintra-accent), 34%)};
+  --pintra-accent-glow-soft: #{blend(var(--pintra-accent), 16%)};
+
+  --pintra-focus-ring: #{blend(var(--pintra-accent), 62%)};
+  --pintra-focus-halo: #{blend(var(--pintra-accent), 22%)};
+
+  --pintra-primary-bg: var(
+    --vscode-button-background,
+    var(--vscode-textLink-foreground, #0e639c)
+  );
+  --pintra-primary-hover: var(
+    --vscode-button-hoverBackground,
+    var(--pintra-primary-bg)
+  );
+  --pintra-primary-fg: var(--vscode-button-foreground, #ffffff);
+  --pintra-secondary-bg: var(
+    --vscode-button-secondaryBackground,
+    var(--pintra-surface-subtle)
+  );
+  --pintra-secondary-hover: var(
+    --vscode-button-secondaryHoverBackground,
+    var(--pintra-surface-hover)
+  );
+  --pintra-secondary-fg: var(
+    --vscode-button-secondaryForeground,
+    var(--pintra-fg)
+  );
+  --pintra-monochrome-active-bg: var(--pintra-fg);
+  --pintra-monochrome-active-fg: var(--pintra-bg);
+
+  --pintra-info: var(
+    --vscode-notificationsInfoIcon-foreground,
+    var(--vscode-textLink-foreground, #75beff)
+  );
+  --pintra-info-bg: #{blend(var(--pintra-info), 14%, var(--pintra-surface))};
+  --pintra-warning: var(--vscode-editorWarning-foreground, #cca700);
+  --pintra-error: var(--vscode-errorForeground, #f14c4c);
+  --pintra-error-bg: #{blend(var(--pintra-error), 12%, var(--pintra-surface))};
+  --pintra-error-border: #{blend(var(--pintra-error), 44%, var(--pintra-border))};
+  --pintra-success: var(--pintra-accent);
+
+  --pintra-tool-surface: var(
+    --vscode-textCodeBlock-background,
+    var(--pintra-surface-subtle)
+  );
+  --pintra-tool-content-surface: #{blend(
+      var(--pintra-tool-surface),
+      72%,
+      var(--pintra-surface-elevated)
+    )};
+  --pintra-thinking-surface: #{blend(
+      var(
+        --vscode-editor-selectionHighlightBackground,
+        var(--pintra-surface-subtle)
+      ),
+      34%,
+      var(--pintra-surface-elevated)
+    )};
+
+  --pintra-scrollbar-thumb: var(
+    --vscode-scrollbarSlider-background,
+    rgba(120, 120, 120, 0.4)
+  );
+  --pintra-scrollbar-thumb-hover: var(
+    --vscode-scrollbarSlider-hoverBackground,
+    rgba(120, 120, 120, 0.6)
+  );
+  --pintra-scrollbar-thumb-active: #{blend(
+      var(--pintra-accent),
+      70%,
+      var(--pintra-scrollbar-thumb)
+    )};
+  --pintra-scrollbar-track: transparent;
+
+  --pintra-radius-xs: 4px;
+  --pintra-radius-sm: 6px;
+  --pintra-radius: 9px;
+  --pintra-radius-md: 11px;
+  --pintra-radius-lg: 14px;
+  --pintra-radius-pill: 999px;
+
+  --pintra-header-height: 49px;
+  --pintra-z-dropdown: 3000;
+
+  --pintra-font: 'Pintra Mono', ui-sans-serif, sans-serif;
+  --pintra-font-size: 13px;
+  --pintra-font-weight: 400;
+  --pintra-font-style: normal;
+  --pintra-monospace: 'Pintra Mono', ui-monospace, monospace;
+  --pintra-type-code: 11px;
+  --pintra-type-xs: 0.72rem;
+  --pintra-type-sm: 0.82rem;
+  --pintra-type-lg: 1.08rem;
+  --pintra-line-body: 1.6;
+  --pintra-line-code: 1.5;
+  --pintra-tracking-tight: -0.006em;
+  --pintra-tracking-wide: 0.08em;
+  --pintra-tracking-caps: 0.14em;
+
+  --pintra-space-2xs: 2px;
+  --pintra-space-xs: 4px;
+  --pintra-space-sm: 8px;
+  --pintra-space-md: 12px;
+  --pintra-space-lg: 20px;
+  --pintra-space-xl: 32px;
+  --pintra-spacing-mult: 0.5;
+
+  --pintra-highlight: #{blend(var(--pintra-fg), 6%)};
+  --pintra-shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04);
+  --pintra-shadow-md:
+    0 2px 4px rgba(0, 0, 0, 0.08), 0 6px 16px rgba(0, 0, 0, 0.1);
+  --pintra-shadow-lg:
+    0 4px 8px rgba(0, 0, 0, 0.1), 0 16px 40px rgba(0, 0, 0, 0.16);
+  --pintra-shadow-glow:
+    0 0 0 1px var(--pintra-accent-glow-soft),
+    0 2px 18px var(--pintra-accent-glow);
+
+  --pintra-transition-fast: 0.12s;
+  --pintra-transition: 0.2s ease;
+  --pintra-transition-slow: 0.32s;
+  --pintra-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --pintra-ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+  --pintra-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --pintra-suggest-fg: var(
+    --vscode-editorSuggestWidget-foreground,
+    var(--pintra-fg)
+  );
+  --pintra-menu-bg: var(--pintra-surface-elevated);
+  --pintra-menu-border: #{blend(var(--pintra-border-strong), 90%, var(--pintra-fg) 6%)};
+  --pintra-menu-shadow: var(--pintra-shadow-lg);
+  --pintra-list-hover-bg: var(--pintra-surface-hover);
+  --pintra-list-selected-border: #{blend(
+      var(--pintra-accent),
+      60%,
+      var(--pintra-border)
+    )};
+}
+
+/* Light themes */
+body[data-vscode-theme-kind='vscode-light'],
+body[data-vscode-theme-kind='vscode-high-contrast-light'] {
+  --pintra-accent: #0a9d76;
+  --pintra-accent-contrast: #ffffff;
+  --pintra-accent-glow: #{blend(var(--pintra-accent), 26%)};
+  --pintra-monochrome-active-bg: #1c1c1e;
+  --pintra-monochrome-active-fg: #ffffff;
+  --pintra-fg: #{blend(
+      var(--vscode-foreground, var(--vscode-editor-foreground, #1a1a1a)),
+      92%,
+      #000000
+    )};
+  --pintra-block-border: #{blend(var(--pintra-border-strong), 86%, var(--pintra-fg) 10%)};
+  --pintra-block-divider: #{blend(var(--pintra-block-border), 88%)};
+  --pintra-tool-surface: var(
+    --vscode-textCodeBlock-background,
+    var(--pintra-surface-elevated)
+  );
+  --pintra-tool-content-surface: #ffffff;
+  --pintra-input-emboss-ring: #{blend(var(--pintra-fg), 4%)};
+  --pintra-highlight: rgba(255, 255, 255, 0.7);
+  --pintra-hljs-fg: #24292e;
+  --pintra-hljs-comment: #6a737d;
+  --pintra-hljs-keyword: #d73a49;
+  --pintra-hljs-title: #6f42c1;
+  --pintra-hljs-attr: #005cc5;
+  --pintra-hljs-string: #032f62;
+  --pintra-hljs-built-in: #e36209;
+  --pintra-hljs-name: #22863a;
+  --pintra-hljs-section: #005cc5;
+  --pintra-hljs-bullet: #735c0f;
+  --pintra-hljs-addition-fg: #22863a;
+  --pintra-hljs-addition-bg: #f0fff4;
+  --pintra-hljs-deletion-fg: #b31d28;
+  --pintra-hljs-deletion-bg: #ffeef0;
+  --pintra-shadow-sm:
+    0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 1px rgba(15, 23, 42, 0.04);
+  --pintra-shadow-md:
+    0 2px 4px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.08);
+  --pintra-shadow-lg:
+    0 4px 10px rgba(15, 23, 42, 0.08), 0 18px 44px rgba(15, 23, 42, 0.14);
+}
+
+/* Dark themes */
+body[data-vscode-theme-kind='vscode-dark'],
+body[data-vscode-theme-kind='vscode-high-contrast'] {
+  --pintra-accent: #45e3c2;
+  --pintra-accent-contrast: #052018;
+  --pintra-accent-glow: #{blend(var(--pintra-accent), 40%)};
+  --pintra-monochrome-active-bg: #f0f0f2;
+  --pintra-monochrome-active-fg: #17171a;
+  --pintra-block-border: #{blend(var(--pintra-border-strong), 80%, var(--pintra-fg) 14%)};
+  --pintra-block-divider: #{blend(var(--pintra-block-border), 84%)};
+  --pintra-tool-content-surface: #{blend(var(--pintra-tool-surface), 60%, #000000)};
+  --pintra-input-emboss-ring: #{blend(var(--pintra-fg), 3%)};
+  --pintra-highlight: #{blend(var(--pintra-fg), 7%)};
+  --pintra-hljs-fg: #c9d1d9;
+  --pintra-hljs-comment: #8b949e;
+  --pintra-hljs-keyword: #ff7b72;
+  --pintra-hljs-title: #d2a8ff;
+  --pintra-hljs-attr: #79c0ff;
+  --pintra-hljs-string: #a5d6ff;
+  --pintra-hljs-built-in: #ffa657;
+  --pintra-hljs-name: #7ee787;
+  --pintra-hljs-section: #1f6feb;
+  --pintra-hljs-bullet: #f2cc60;
+  --pintra-hljs-addition-fg: #aff5b4;
+  --pintra-hljs-addition-bg: #033a16;
+  --pintra-hljs-deletion-fg: #ffdcd7;
+  --pintra-hljs-deletion-bg: #67060c;
+  --pintra-shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
+  --pintra-shadow-md:
+    0 2px 6px rgba(0, 0, 0, 0.36), 0 10px 24px rgba(0, 0, 0, 0.44);
+  --pintra-shadow-lg:
+    0 6px 14px rgba(0, 0, 0, 0.44), 0 22px 52px rgba(0, 0, 0, 0.56);
+}

@@ -1,0 +1,610 @@
+/* Session list label bar */
+.session-grid-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--pintra-muted) 82%, var(--pintra-fg) 18%);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  margin-bottom: 12px;
+  padding: 0 4px 9px;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--pintra-border-subtle) 76%, transparent);
+  justify-content: space-between;
+}
+
+.session-grid-label-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 0 1 auto;
+}
+
+.session-grid-delete-all {
+  appearance: none;
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--pintra-error);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.session-grid-delete-all:hover,
+.session-grid-delete-all:focus-visible {
+  color: color-mix(in srgb, var(--pintra-error) 82%, #000);
+  text-decoration: underline;
+  outline: none;
+}
+
+.session-grid-label-rule {
+  height: 1px;
+  flex: 1 1 auto;
+  min-width: 20px;
+  background: color-mix(in srgb, var(--pintra-border-subtle) 76%, transparent);
+}
+
+/* Scrollable list container */
+.session-grid-list {
+  position: relative;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: min(320px, 40vh);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 6px;
+  border: 1px solid var(--pintra-border-subtle);
+  border-radius: var(--pintra-radius-lg);
+  background: var(--pintra-surface);
+  box-shadow: var(--pintra-shadow-md);
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+/* Scroll shadow indicators */
+.session-grid-list.session-grid-shadow-top {
+  box-shadow: inset 0 16px 16px -18px #0003;
+}
+
+.session-grid-list.session-grid-shadow-bottom {
+  box-shadow: inset 0 -16px 16px -18px #0003;
+}
+
+.session-grid-list.session-grid-shadow-top.session-grid-shadow-bottom {
+  box-shadow:
+    inset 0 16px 16px -18px #00000038,
+    inset 0 -16px 16px -18px #00000038;
+}
+
+/* Dark theme scroll shadows */
+body[data-vscode-theme-kind*='dark'] .session-grid-list.session-grid-shadow-top,
+body[data-vscode-theme-kind*='high-contrast']
+  .session-grid-list.session-grid-shadow-top {
+  box-shadow: inset 0 16px 16px -18px #0006;
+}
+
+body[data-vscode-theme-kind*='dark']
+  .session-grid-list.session-grid-shadow-bottom,
+body[data-vscode-theme-kind*='high-contrast']
+  .session-grid-list.session-grid-shadow-bottom {
+  box-shadow: inset 0 -16px 16px -18px #0006;
+}
+
+body[data-vscode-theme-kind*='dark']
+  .session-grid-list.session-grid-shadow-top.session-grid-shadow-bottom,
+body[data-vscode-theme-kind*='high-contrast']
+  .session-grid-list.session-grid-shadow-top.session-grid-shadow-bottom {
+  box-shadow:
+    inset 0 16px 16px -18px #00000075,
+    inset 0 -16px 16px -18px #00000075;
+}
+
+/* Empty state */
+.session-grid-empty {
+  padding: 24px var(--pintra-space-lg);
+  text-align: center;
+  color: var(--pintra-muted);
+  font-size: 0.84em;
+}
+
+/* Delete button reveal on hover */
+.sidebar-session-row:hover .session-del-btn,
+#home-panel .session-grid-row:hover .session-del-btn,
+.sidebar-session-row:focus-within .session-del-btn,
+#home-panel .session-grid-row:focus-within .session-del-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Group layout */
+#home-panel .session-grid-group + .session-grid-group {
+  margin-top: 12px;
+}
+
+#home-panel .session-grid-group-header {
+  display: none;
+}
+
+#home-panel .session-grid-group-header .pi-icon {
+  width: 11px;
+  height: 11px;
+  transition: transform 0.15s ease;
+}
+
+#home-panel .session-grid-group.collapsed .session-grid-group-header .pi-icon {
+  transform: rotate(-90deg);
+}
+
+#home-panel .session-grid-group.collapsed .session-grid-group-items {
+  display: none;
+}
+
+#home-panel .session-grid-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+}
+
+/* Main row */
+#home-panel .session-grid-row {
+  --session-branch-depth: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 0.89rem;
+  min-height: 46px;
+  padding: 9px 12px 9px calc(12px + var(--session-branch-depth) * 22px);
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: var(--pintra-radius);
+  background: #0000;
+  box-sizing: border-box;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    filter 0.18s ease,
+    border-color 0.14s ease,
+    background 0.14s ease;
+}
+
+.session-branch-toggle .pi-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Row hover */
+#home-panel .session-grid-row:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--pintra-accent) 26%,
+    var(--pintra-border-subtle)
+  );
+  background: color-mix(in srgb, var(--pintra-surface-hover) 84%, transparent);
+}
+
+/* Row focus */
+#home-panel .session-grid-row:focus-visible {
+  outline: 1px solid var(--pintra-focus-ring);
+  outline-offset: 1px;
+  border-color: color-mix(in srgb, var(--pintra-focus-ring) 48%, transparent);
+  background: color-mix(in srgb, var(--pintra-surface-hover) 70%, transparent);
+}
+
+/* Opening state */
+#home-panel .session-grid-row.is-opening {
+  background: color-mix(
+    in srgb,
+    var(--pintra-fg) 8%,
+    var(--pintra-surface-hover)
+  );
+  border-color: color-mix(in srgb, var(--pintra-border) 66%, transparent);
+  cursor: wait;
+  animation: session-load-glow 1.2s ease-in-out infinite;
+}
+
+#home-panel .session-grid-row.is-opening:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: var(--pintra-radius-pill);
+  background: var(--pintra-accent);
+  box-shadow: 0 0 8px var(--pintra-accent-glow);
+  animation: session-load-pulse 0.7s ease-in-out infinite;
+}
+
+#home-panel .session-grid-row.is-opening:after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 38%,
+    color-mix(in srgb, var(--pintra-fg) 12%, transparent) 50%,
+    transparent 62%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  mix-blend-mode: screen;
+  opacity: 0.42;
+  pointer-events: none;
+  animation: session-load-scan 1.1s steps(8, end) infinite;
+}
+
+#home-panel .session-grid-row.is-disabled-by-opening {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+#home-panel .session-grid-row.is-opening .session-del-btn,
+#home-panel .session-grid-row.is-disabled-by-opening .session-del-btn,
+#home-panel .session-grid-row.is-opening .session-editor-btn,
+#home-panel .session-grid-row.is-disabled-by-opening .session-editor-btn,
+#home-panel .session-grid-row.is-opening .session-rename-btn,
+#home-panel .session-grid-row.is-disabled-by-opening .session-rename-btn,
+#home-panel .session-grid-row.is-opening .session-grid-editor-badge,
+#home-panel
+  .session-grid-row.is-disabled-by-opening
+  .session-grid-editor-badge {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes session-load-pulse {
+  0%,
+  to {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes session-load-glow {
+  0%,
+  to {
+    background: color-mix(
+      in srgb,
+      var(--pintra-fg) 6%,
+      var(--pintra-surface-hover)
+    );
+  }
+  50% {
+    background: color-mix(
+      in srgb,
+      var(--pintra-fg) 11%,
+      var(--pintra-surface-hover)
+    );
+  }
+}
+
+@keyframes session-load-scan {
+  0% {
+    background-position: 160% 0;
+  }
+  to {
+    background-position: -60% 0;
+  }
+}
+
+/* Row sub-layout */
+#home-panel .session-grid-row-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#home-panel .session-grid-row-top {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 7px;
+}
+
+#home-panel .session-grid-row-top-rename {
+  width: 100%;
+}
+
+#home-panel .session-grid-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  min-width: 0;
+  margin-left: auto;
+}
+
+#home-panel .session-grid-row:hover .session-del-btn,
+#home-panel .session-grid-row:focus-within .session-del-btn {
+  opacity: 1;
+}
+
+#home-panel .session-del-btn,
+#home-panel .session-rename-btn,
+#home-panel .session-editor-btn {
+  border-radius: 6px;
+  transition: none;
+}
+
+/* Row title */
+#home-panel .session-grid-row-title {
+  font-size: inherit;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--pintra-fg) 94%, var(--pintra-muted));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Rename input */
+#home-panel .session-grid-rename {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#home-panel .session-grid-rename-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 24px;
+  padding: 2px 6px;
+  border: 1px solid var(--pintra-input-border);
+  border-radius: var(--pintra-radius-sm);
+  background: var(--pintra-input-bg);
+  color: var(--pintra-fg);
+  font: inherit;
+  font-size: inherit;
+  font-weight: 560;
+  line-height: 1.25;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+#home-panel .session-grid-rename-input:focus {
+  border-color: color-mix(
+    in srgb,
+    var(--pintra-focus-ring) 70%,
+    var(--pintra-input-border)
+  );
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--pintra-focus-ring) 34%, transparent);
+}
+
+/* Action buttons (save, cancel, rename, open-editor, delete) */
+#home-panel .session-grid-rename-save,
+#home-panel .session-grid-rename-cancel,
+.session-rename-btn,
+.session-editor-btn,
+.session-del-btn {
+  appearance: none;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: var(--pintra-radius-sm);
+  background: #0000;
+  color: var(--pintra-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    opacity 0.12s ease,
+    background 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+
+#home-panel .session-grid-rename-save:hover,
+#home-panel .session-grid-rename-save:focus-visible {
+  border-color: color-mix(
+    in srgb,
+    var(--pintra-success, #3fb950) 55%,
+    var(--pintra-input-border)
+  );
+  background: color-mix(
+    in srgb,
+    var(--pintra-success, #3fb950) 12%,
+    var(--pintra-surface-hover)
+  );
+  color: var(--pintra-fg);
+}
+
+#home-panel .session-grid-rename-cancel:hover,
+#home-panel .session-grid-rename-cancel:focus-visible,
+.session-rename-btn:hover {
+  border-color: var(--pintra-input-border);
+  background: var(--pintra-surface-hover);
+  color: var(--pintra-fg);
+}
+
+#home-panel .session-grid-rename-save:focus-visible,
+#home-panel .session-grid-rename-cancel:focus-visible,
+.session-rename-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--pintra-accent) 30%, transparent);
+}
+
+#home-panel .session-grid-rename-save .pi-icon,
+#home-panel .session-grid-rename-cancel .pi-icon,
+.session-rename-btn .pi-icon {
+  width: 13px;
+  height: 13px;
+}
+
+/* Opening inline label */
+#home-panel .session-grid-row-loading {
+  color: var(--pintra-muted);
+}
+
+#home-panel .session-grid-opening {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  color: inherit;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+#home-panel .session-grid-opening .ld {
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.session-grid-editor-badge .pi-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Rename button visibility */
+#home-panel .session-grid-row:not(.is-renaming) .session-rename-btn {
+  opacity: 0.42;
+  pointer-events: auto;
+}
+
+#home-panel .session-grid-row:hover .session-rename-btn,
+#home-panel .session-grid-row:focus-within .session-rename-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Open editor button visibility */
+#home-panel .session-grid-row:hover .session-editor-btn,
+#home-panel .session-grid-row:focus-within .session-editor-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.session-editor-btn .pi-icon {
+  width: 13px;
+  height: 13px;
+}
+
+#home-panel .session-grid-row:not(.is-opening) .session-editor-btn,
+#home-panel .session-grid-row:not(.is-opening) .session-del-btn {
+  opacity: 0.42;
+  pointer-events: auto;
+}
+
+/* Open editor hover/focus */
+#home-panel .session-editor-btn:hover,
+#home-panel .session-editor-btn:focus-visible {
+  border-color: var(--pintra-input-border);
+  background: var(--pintra-surface-hover);
+  color: var(--pintra-fg);
+  outline: none;
+}
+
+/* Delete button hover/focus */
+#home-panel .session-del-btn:hover,
+#home-panel .session-del-btn:focus-visible {
+  border-color: color-mix(in srgb, var(--pintra-error) 45%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--pintra-error) 12%,
+    var(--pintra-surface-hover)
+  );
+  color: var(--pintra-error);
+  outline: none;
+}
+
+/* Row metadata */
+#home-panel .session-grid-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.76rem;
+  color: var(--pintra-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#home-panel .session-grid-meta-item {
+  flex-shrink: 0;
+}
+
+#home-panel .session-grid-meta-time {
+  margin-left: auto;
+  color: color-mix(in srgb, var(--pintra-fg-muted) 76%, transparent);
+  font-size: 0.76rem;
+  text-align: right;
+}
+
+/* Running indicator badge */
+#home-panel .session-grid-running {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  min-height: 18px;
+  padding: 0 7px;
+  border: 1px solid var(--pintra-accent-line);
+  border-radius: var(--pintra-radius-pill);
+  background: var(--pintra-accent-faint);
+  color: var(--pintra-accent-strong);
+  font-size: 0.72rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+#home-panel .session-grid-running .pi-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Mobile responsive */
+@media (max-width: 520px) {
+  .session-grid-list {
+    padding: 4px;
+  }
+
+  #home-panel .session-grid-row {
+    padding-right: 5px;
+    padding-left: calc(6px + var(--session-branch-depth) * 18px);
+  }
+
+  #home-panel .session-grid-actions {
+    gap: 4px;
+  }
+
+  #home-panel .session-grid-editor-badge {
+    display: none;
+  }
+}
+
+/* Empty session state */
+#home-panel .session-grid-empty-msg {
+  padding: var(--pintra-space-xl) var(--pintra-space-lg);
+  text-align: center;
+  color: var(--pintra-muted);
+  font-size: 0.9em;
+}

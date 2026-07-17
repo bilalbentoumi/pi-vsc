@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "pnpm run build",
+			"problemMatcher": [],
+			"label": "pnpm: build",
+			"detail": "Bundle extension host + webview"
+		},
+		{
+			"type": "shell",
+			"command": "pnpm run watch",
+			"isBackground": true,
+			"problemMatcher": {
+				"pattern": {
+					"regexp": "^(.*)$",
+					"file": 1
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "build finished",
+					"endsPattern": "\\[esbuild\\] watching"
+				}
+			},
+			"label": "pnpm: watch",
+			"detail": "Rebuild on change (background)"
+		}
+	]
+}

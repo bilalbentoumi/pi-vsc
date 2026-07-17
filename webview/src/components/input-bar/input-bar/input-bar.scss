@@ -1,0 +1,263 @@
+/* Composer — the hero surface. Comes alive with a phosphor focus glow. */
+.input-bar {
+  --pintra-input-emboss-border: color-mix(
+    in srgb,
+    var(--pintra-border-strong) 84%,
+    transparent
+  );
+  --pintra-input-emboss-highlight: var(--pintra-highlight);
+  --pintra-input-emboss-shadow: color-mix(in srgb, #000000 10%, transparent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 15px;
+  gap: 15px;
+  background: var(--pintra-surface-elevated);
+  border: 1px solid var(--pintra-input-emboss-border);
+  border-radius: var(--pintra-radius-md);
+  box-shadow:
+    inset 0 1px 0 var(--pintra-input-emboss-highlight),
+    var(--pintra-shadow-sm);
+  opacity: 1;
+  will-change: opacity, transform;
+  transition:
+    box-shadow 0.24s var(--pintra-ease-out),
+    border-color 0.24s var(--pintra-ease-out),
+    background 0.24s,
+    transform 0.26s var(--pintra-ease-out),
+    visibility linear 0.26s;
+
+  /* Phosphor prompt line — draws in across the top edge on focus. */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: -1px;
+    height: 1.5px;
+    border-radius: var(--pintra-radius-pill);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--pintra-accent) 22%,
+      var(--pintra-accent) 78%,
+      transparent
+    );
+    opacity: 0;
+    transform: scaleX(0.35);
+    transition:
+      opacity 0.3s ease,
+      transform 0.45s var(--pintra-ease-out);
+    pointer-events: none;
+  }
+
+  &:focus-within {
+    border-color: var(--pintra-accent-line);
+    box-shadow:
+      inset 0 1px 0 var(--pintra-input-emboss-highlight),
+      0 0 0 3px var(--pintra-focus-halo),
+      0 8px 28px var(--pintra-accent-glow-soft);
+  }
+
+  &:focus-within::before {
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-field {
+    position: relative;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    resize: none;
+    border: none;
+    border-radius: 0;
+    background: transparent !important;
+    min-height: 0;
+    font-family: var(--pintra-font);
+    font-size: calc(var(--pintra-font-size) + 1px);
+    font-weight: 500;
+    letter-spacing: var(--pintra-tracking-tight);
+    color: var(--vscode-input-foreground, var(--pintra-fg));
+    -webkit-text-fill-color: var(--vscode-input-foreground, var(--pintra-fg));
+    caret-color: var(--pintra-accent);
+    caret-shape: bar;
+    opacity: 1;
+    line-height: 1.6;
+    outline: none;
+    overflow-y: auto;
+    margin-bottom: 0;
+
+    &::placeholder {
+      color: var(--vscode-input-placeholderForeground);
+      font-size: 0.9em;
+      font-weight: 600;
+      opacity: 0.66;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+  }
+
+  .input-divider {
+    height: 1px;
+    border: none;
+    background: var(--pintra-hairline);
+  }
+}
+
+/* Composer Toolbar */
+.input-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Attachment chips */
+.input-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+}
+
+.attach-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--pintra-radius-sm);
+  background: var(--pintra-surface-secondary);
+  border: 1px solid var(--pintra-border);
+  max-width: 200px;
+  animation: chip-in 0.15s ease-out;
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.attach-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.attach-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--pintra-accent-muted);
+  color: var(--pintra-accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.attach-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.attach-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pintra-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attach-size {
+  font-size: 10px;
+  color: var(--pintra-fg-muted);
+}
+
+.attach-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--pintra-fg-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.12s,
+    color 0.12s;
+
+  &:hover {
+    background: var(--pintra-surface-tertiary);
+    color: var(--pintra-fg);
+  }
+}
+
+/* Light mode */
+body[data-vscode-theme-kind='vscode-light'],
+body[data-vscode-theme-kind='vscode-high-contrast-light'] {
+  .input-bar {
+    --pintra-input-emboss-border: color-mix(
+      in srgb,
+      var(--pintra-border-strong) 62%,
+      var(--pintra-fg) 7%
+    );
+    --pintra-input-emboss-highlight: rgba(255, 255, 255, 0.7);
+    background: #fff;
+    box-shadow:
+      inset 0 1px 0 var(--pintra-input-emboss-highlight),
+      var(--pintra-shadow-md);
+  }
+
+  .input-bar:focus-within {
+    box-shadow:
+      inset 0 1px 0 var(--pintra-input-emboss-highlight),
+      0 0 0 3px var(--pintra-focus-halo),
+      var(--pintra-shadow-md);
+  }
+}
+
+/* Dark mode */
+body[data-vscode-theme-kind*='dark'],
+body[data-vscode-theme-kind*='high-contrast'] {
+  .input-bar {
+    --pintra-input-emboss-border: color-mix(
+      in srgb,
+      var(--pintra-border-strong) 86%,
+      var(--pintra-fg) 8%
+    );
+    --pintra-input-emboss-highlight: color-mix(
+      in srgb,
+      var(--pintra-fg) 7%,
+      transparent
+    );
+    background: color-mix(in srgb, var(--pintra-panel) 86%, var(--pintra-fg));
+  }
+}

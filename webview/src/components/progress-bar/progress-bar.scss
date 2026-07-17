@@ -1,0 +1,40 @@
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: calc(var(--pintra-space-sm) * var(--pintra-spacing-mult)) 0;
+  padding: 2px 2px 2px 0;
+  font-size: 0.86em;
+  color: var(--pintra-muted);
+  user-select: none;
+  animation: working-indicator-fade-in 0.2s var(--pintra-ease-out) both;
+}
+
+/* Shared retro loading dots, tinted with the accent color. */
+.progress-dots {
+  color: var(--pintra-accent);
+}
+
+.progress-label {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--pintra-muted) 55%, var(--pintra-fg));
+}
+
+.progress-time {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: var(--pintra-fg-faint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--pintra-tracking-wide);
+}
+
+@keyframes working-indicator-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

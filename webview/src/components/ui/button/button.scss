@@ -1,0 +1,210 @@
+/* Buttons */
+.btn {
+  --pintra-btn-transition:
+    color, background-color, border-color, box-shadow, opacity, transform;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-sizing: border-box;
+  font-family: var(--pintra-font);
+  font-weight: 550;
+  line-height: 1;
+  letter-spacing: var(--pintra-tracking-tight);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--pintra-radius-sm);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition-property: var(--pintra-btn-transition);
+  transition-timing-function: var(--pintra-ease-out);
+  transition-duration: var(--pintra-transition-fast);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--pintra-focus-halo);
+}
+
+/* Variants */
+.btn.btn-ghost {
+  color: var(--pintra-muted);
+  background-color: transparent;
+}
+
+.btn.btn-ghost:hover {
+  background-color: var(--pintra-surface-raise);
+  color: var(--pintra-fg);
+}
+
+.btn.btn-ghost:active {
+  background-color: color-mix(in srgb, var(--pintra-fg) 9%, transparent);
+}
+
+.btn.btn-ghost:focus-visible {
+  color: var(--pintra-fg);
+  background-color: var(--pintra-surface-raise);
+}
+
+.btn.btn-ghost[aria-expanded='true'] {
+  color: var(--pintra-fg);
+  background-color: var(--pintra-surface-raise);
+}
+
+.btn.btn-primary {
+  background-color: var(--pintra-primary-bg);
+  color: var(--pintra-primary-fg);
+}
+
+.btn.btn-primary:hover {
+  background-color: var(--pintra-primary-hover);
+  box-shadow: var(--pintra-shadow-sm);
+}
+
+.btn.btn-primary[aria-expanded='true'] {
+  background-color: var(--pintra-primary-hover);
+  box-shadow: var(--pintra-shadow-sm);
+}
+
+.btn.btn-secondary {
+  background-color: var(--pintra-secondary-bg);
+  color: var(--pintra-secondary-fg);
+}
+
+.btn.btn-secondary:hover {
+  background-color: var(--pintra-secondary-hover);
+}
+
+.btn.btn-secondary[aria-expanded='true'] {
+  background-color: var(--pintra-secondary-hover);
+}
+
+/* Signature CTA — high-contrast monochrome pill with tactile phosphor glow */
+.btn.btn-contained {
+  --pintra-btn-contained-hover-bg: color-mix(
+    in srgb,
+    var(--pintra-monochrome-active-bg) 92%,
+    var(--pintra-accent)
+  );
+  --pintra-btn-contained-active-bg: color-mix(
+    in srgb,
+    var(--pintra-monochrome-active-bg) 82%,
+    var(--pintra-bg)
+  );
+  background-color: var(--pintra-monochrome-active-bg);
+  color: var(--pintra-monochrome-active-fg);
+}
+
+.btn.btn-contained:hover {
+  background-color: var(--pintra-btn-contained-hover-bg);
+}
+
+.btn.btn-contained:active {
+  background-color: var(--pintra-btn-contained-active-bg);
+}
+
+.btn.btn-contained[aria-expanded='true'] {
+  background-color: var(--pintra-btn-contained-hover-bg);
+}
+
+.btn.btn-contained:focus-visible {
+  box-shadow: 0 0 0 3px var(--pintra-focus-halo);
+}
+
+.btn.btn-contained:disabled {
+  background-color: transparent;
+  border-color: var(--pintra-hairline);
+  color: var(--pintra-muted);
+}
+
+.btn.btn-error {
+  --pintra-btn-error-hover-bg: color-mix(
+    in srgb,
+    var(--pintra-error) 18%,
+    var(--pintra-surface)
+  );
+  --pintra-btn-error-active-bg: color-mix(
+    in srgb,
+    var(--pintra-error) 24%,
+    var(--pintra-surface)
+  );
+  background-color: var(--pintra-error-bg);
+  color: var(--pintra-error);
+  border-color: color-mix(in srgb, var(--pintra-error) 26%, transparent);
+}
+
+.btn.btn-error:hover {
+  background-color: var(--pintra-btn-error-hover-bg);
+  border-color: var(--pintra-error-border);
+}
+
+.btn.btn-error:active {
+  background-color: var(--pintra-btn-error-active-bg);
+}
+
+.btn.btn-error[aria-expanded='true'] {
+  background-color: var(--pintra-btn-error-hover-bg);
+  border-color: var(--pintra-error-border);
+}
+
+.btn.btn-error:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pintra-error) 22%, transparent);
+}
+
+.btn.btn-trigger {
+  font-weight: 600;
+  color: var(--pintra-fg);
+  background-color: transparent;
+}
+
+.btn.btn-trigger:hover {
+  background-color: var(--pintra-surface-raise);
+}
+
+.btn.btn-trigger:active {
+  background-color: color-mix(in srgb, var(--pintra-fg) 10%, transparent);
+}
+
+.btn.btn-trigger[aria-expanded='true'] {
+  color: var(--pintra-accent-strong);
+  background-color: var(--pintra-accent-faint);
+}
+
+/* Sizes */
+.btn.btn-sm {
+  height: 26px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 13px;
+}
+
+.btn.btn-sm.btn-icon-only {
+  width: 26px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.btn.btn-sm .btn-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.btn.btn-md {
+  height: 30px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.btn.btn-md.btn-icon-only {
+  width: 30px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.btn.btn-md .btn-icon {
+  width: 14px;
+  height: 14px;
+}

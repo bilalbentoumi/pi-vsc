@@ -1,0 +1,143 @@
+/* container spacing */
+.reasoning-block {
+  margin: calc(var(--pintra-space-sm) * var(--pintra-spacing-mult)) 0;
+}
+
+/* toggle button — "Thinking…" while active, "Thought" once complete */
+.reasoning-summary {
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--pintra-radius-sm);
+  color: var(--pintra-muted);
+  column-gap: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.86em;
+  font-weight: 500;
+  padding: 3px 8px 3px 4px;
+  user-select: none;
+  transition:
+    color var(--pintra-transition-fast),
+    background var(--pintra-transition-fast);
+}
+
+.reasoning-summary:hover {
+  background: color-mix(
+    in srgb,
+    var(--pintra-thinking-surface) 40%,
+    transparent
+  );
+  color: var(--pintra-fg);
+}
+
+.reasoning-summary:disabled {
+  cursor: default;
+}
+
+.reasoning-summary:disabled:hover {
+  background: transparent;
+}
+
+.reasoning-summary:focus-visible {
+  outline: 2px solid
+    color-mix(in srgb, var(--pintra-focus-ring) 46%, transparent);
+  outline-offset: 1px;
+}
+
+/* rotation arrow */
+.reasoning-chevron {
+  flex-shrink: 0;
+  height: 13px;
+  transition: transform var(--pintra-transition-fast);
+  width: 13px;
+}
+
+.reasoning-block.is-expanded .reasoning-chevron,
+body.show-thinking .reasoning-block:not(.is-active) .reasoning-chevron {
+  transform: rotate(90deg);
+}
+
+/* dim chevron while still computing (nothing to expand) */
+.reasoning-summary:disabled .reasoning-chevron {
+  opacity: 0.4;
+}
+
+.reasoning-label {
+  font-style: italic;
+}
+
+/* animated loader dots beside the label */
+.reasoning-dots {
+  align-items: center;
+  column-gap: 3px;
+  display: inline-flex;
+  margin-left: 2px;
+}
+
+.reasoning-dots > span {
+  animation: dot-bounce 1.2s var(--pintra-ease-out) infinite;
+  background: currentColor;
+  border-radius: var(--pintra-radius-pill);
+  height: 3px;
+  opacity: 0.3;
+  width: 3px;
+}
+
+.reasoning-dots > span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.reasoning-dots > span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes dot-bounce {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+
+/* expandable reasoning panel — hidden by default */
+.reasoning-body {
+  animation: reason-fade 0.2s var(--pintra-ease-out) both;
+  border-left: 2px solid var(--pintra-accent-line);
+  color: color-mix(in srgb, var(--pintra-muted) 88%, var(--pintra-fg));
+  display: none;
+  font-size: var(--pintra-font-size);
+  font-style: italic;
+  line-height: 1.5;
+  margin: 4px 0 0 5px;
+  max-height: min(320px, 50vh);
+  overflow-wrap: anywhere;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.reasoning-block.is-expanded .reasoning-body,
+body.show-thinking .reasoning-body {
+  display: block;
+}
+
+@keyframes reason-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

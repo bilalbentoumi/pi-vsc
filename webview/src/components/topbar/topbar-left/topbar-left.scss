@@ -1,0 +1,31 @@
+/* Header left region */
+.topbar .topbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--pintra-space-sm);
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+}
+
+/* Brand */
+.topbar-logo {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Session name */
+#title-text {
+  font-size: 0.9em;
+  color: var(--pintra-fg);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 0 1 auto;
+  min-width: 0;
+}

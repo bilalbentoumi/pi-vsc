@@ -1,0 +1,365 @@
+.entry-content a:focus-visible,
+.exec-block > summary:focus-visible {
+  outline: 2px solid var(--pintra-focus-ring);
+  outline-offset: 2px;
+}
+
+:is(code, pre, kbd, samp, .patch-container, .exec-output) {
+  font-family: var(--pintra-monospace);
+  font-size: var(--pintra-type-code);
+  line-height: var(--pintra-line-code);
+  font-synthesis: none;
+  font-variation-settings:
+    'MONO' 1,
+    'CASL' 0,
+    'CRSV' 0;
+  padding: 2px 6px;
+}
+
+/* ── Markdown code ─────────────────────────────────────
+   Fenced blocks preserve whitespace and scroll horizontally inside a
+   framed surface; inline code reads as a subtle pill. */
+
+.entry-content-md pre.md-code-block {
+  display: block;
+  margin: 8px 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  white-space: pre;
+  /* Anchored on the body bg and pushed toward white so the block always reads
+     as a distinctly lighter surface, in both light and dark themes. */
+  background: color-mix(in srgb, var(--pintra-bg) 72%, #fff);
+  border: 1px solid var(--pintra-border-subtle);
+  border-radius: var(--pintra-radius);
+}
+
+.entry-content-md pre.md-code-block code {
+  display: block;
+  padding: 0;
+  background: none;
+  border: 0;
+  white-space: inherit;
+}
+
+.entry-content-md :not(pre) > code {
+  padding: 1px 5px;
+  background: var(--pintra-surface-raise);
+  border: 1px solid var(--pintra-hairline);
+  border-radius: var(--pintra-radius-sm);
+}
+
+/* ── Assistant message empty-state handling ────────── */
+
+.agent-entry .entry-content {
+  min-height: 20px;
+}
+
+.agent-entry .entry-content:empty {
+  display: none;
+  min-height: 0;
+}
+
+.agent-entry .entry-content:has(> .entry-content-md:only-child:empty) {
+  display: none;
+  min-height: 0;
+}
+
+/* ── Ask-user tool preview layout ────────── */
+
+.exec-block.exec-ask.has-ask-preview:not([open]) > .exec-header {
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  white-space: normal;
+}
+
+.exec-block.exec-ask.has-ask-preview:not([open]) > .exec-header > * {
+  align-self: flex-start;
+}
+
+.exec-block.exec-ask.has-ask-preview:not([open]) > .exec-header .exec-chevron,
+.exec-block.exec-ask.has-ask-preview:not([open]) > .exec-header .exec-type-icon,
+.exec-block.exec-ask.has-ask-preview:not([open]) > .exec-header .exec-name,
+.exec-block.exec-ask.has-ask-preview:not([open]) > .exec-header .tool-duration {
+  margin-top: 2px;
+}
+
+.exec-block.exec-ask.has-ask-preview:not([open]) .exec-ask-preview {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 6px;
+  align-items: center;
+  margin-left: 0;
+  padding-top: 0;
+}
+
+/* ── Diff write preview ──────────────────────────────── */
+
+.exec-write-highlight .patch-line-add {
+  border-left-color: color-mix(
+    in srgb,
+    var(--vscode-terminal-ansiGreen, #3fb950) 34%,
+    transparent
+  );
+  background: color-mix(
+    in srgb,
+    var(--vscode-terminal-ansiGreen, #3fb950) 8%,
+    transparent
+  );
+}
+
+.patch-line-pair > .patch-line {
+  min-height: 100%;
+}
+
+/* ── Scroll buttons ──────────────────────────────────── */
+
+#scroll-down.visible,
+#scroll-up.visible {
+  transform: translateY(0);
+  pointer-events: auto;
+  opacity: 1;
+  border-color: var(--pintra-border-subtle);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--pintra-bg) 16%, transparent);
+}
+
+#scroll-down.visible:hover,
+#scroll-up.visible:hover {
+  background: var(--pintra-panel);
+}
+
+#scroll-down .pi-icon,
+#scroll-up .pi-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── highlight.js token colors ─────────────────────────
+   Palette adapts to theme via the --pintra-hljs-* variables
+   defined in variables.scss. */
+
+.hljs {
+  background: transparent;
+  color: var(--pintra-hljs-fg);
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  color: var(--pintra-hljs-keyword);
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  color: var(--pintra-hljs-title);
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  color: var(--pintra-hljs-attr);
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  color: var(--pintra-hljs-string);
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  color: var(--pintra-hljs-built-in);
+}
+
+.hljs-code,
+.hljs-comment,
+.hljs-formula {
+  color: var(--pintra-hljs-comment);
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  color: var(--pintra-hljs-name);
+}
+
+.hljs-subst {
+  color: var(--pintra-hljs-fg);
+}
+
+.hljs-section {
+  color: var(--pintra-hljs-section);
+  font-weight: 700;
+}
+
+.hljs-bullet {
+  color: var(--pintra-hljs-bullet);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}
+
+.hljs-addition {
+  color: var(--pintra-hljs-addition-fg);
+  background-color: var(--pintra-hljs-addition-bg);
+}
+
+.hljs-deletion {
+  color: var(--pintra-hljs-deletion-fg);
+  background-color: var(--pintra-hljs-deletion-bg);
+}
+
+/* ── Start page hint ─────────────────────────────────── */
+
+.home-hint {
+  display: block;
+  text-align: right;
+  color: var(--pintra-fg-faint);
+  font-size: 0.74em;
+  font-variation-settings: 'MONO' 1;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  margin-top: 7px;
+  margin-bottom: 40px;
+  padding: 0 4px;
+}
+
+/* ── Autocomplete animations & icons ─────────────────── */
+
+@keyframes suggest-slide {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%);
+  }
+}
+
+.suggest-icon .pi-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.suggest-icon-skill .pi-icon,
+.suggest-icon-ext .pi-icon,
+.suggest-icon-prompt .pi-icon {
+  color: color-mix(in srgb, var(--pintra-suggest-fg) 72%, var(--pintra-muted));
+}
+
+.suggest-icon-dir .pi-icon {
+  color: color-mix(
+    in srgb,
+    var(--vscode-icon-folderForeground, var(--pintra-fg)) 74%,
+    var(--pintra-suggest-fg)
+  );
+}
+
+.suggest-icon-file .pi-icon {
+  color: color-mix(
+    in srgb,
+    var(--vscode-icon-fileForeground, var(--pintra-fg)) 74%,
+    var(--pintra-suggest-fg)
+  );
+}
+
+.suggest-name {
+  font-family: var(--pintra-monospace);
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--pintra-suggest-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Session picker ──────────────────────────────────── */
+
+#home-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--pintra-bg);
+  user-select: none;
+  -webkit-user-select: none;
+  animation: home-fade 0.35s ease both;
+}
+
+#home-panel.session-grid-hidden {
+  display: none;
+}
+
+@keyframes home-fade {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Start page composer ─────────────────────────────── */
+
+.home-composer {
+  position: absolute;
+  top: 54%;
+  left: var(--pintra-space-lg);
+  right: var(--pintra-space-lg);
+  padding: 24px 0 0;
+  padding-top: 0;
+  margin: 0;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pintra-space-xl) * 2);
+}
+
+/* ── Content typography ──────────────────────────────── */
+
+:is(.entry-content, .tool-markdown, .reasoning-body) ul,
+:is(.entry-content, .tool-markdown, .reasoning-body) ol {
+  margin: 0.5em 0;
+  padding-left: 2em;
+}
+
+:is(.entry-content, .tool-markdown, .reasoning-body) p {
+  margin: 0.4em 0;
+}
+
+:is(.entry-content, .tool-markdown, .reasoning-body) p:last-child {
+  margin-bottom: 0;
+}
+
+:is(.entry-content, .tool-markdown, .reasoning-body) li {
+  margin: 0.3em 0;
+}

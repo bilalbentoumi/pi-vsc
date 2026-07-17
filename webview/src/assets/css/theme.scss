@@ -1,0 +1,147 @@
+@use './variables.scss';
+@use './global.scss';
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.topbar-provider-icon {
+  display: inline-flex;
+  filter: grayscale(1);
+}
+
+/* Startup Page Footer */
+.screen-foot {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pintra-space-md);
+  padding: 0 var(--pintra-space-lg);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.screen-ver,
+.screen-logo-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--pintra-fg-faint);
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-variation-settings: 'MONO' 1;
+  letter-spacing: var(--pintra-tracking-wide);
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screen-logo-name {
+  color: color-mix(in srgb, var(--pintra-accent) 56%, var(--pintra-muted));
+}
+
+/* Startup Screen */
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 1rem;
+  padding-top: 0;
+}
+
+.home-layout {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow: visible;
+  padding: 1.5rem;
+  padding-top: clamp(54px, 11vh, 100px);
+  padding-bottom: calc(24px + 48px);
+}
+
+.home-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Context Stats */
+.ctx-meter-wrap {
+  position: relative;
+}
+
+.ctx-popup-body {
+  min-width: 200px;
+  padding: 10px 12px;
+  color: var(--pintra-fg);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.ctx-popup-title {
+  font-size: 0.92em;
+  font-weight: 600;
+  color: var(--pintra-fg);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.ctx-popup-grid {
+  display: grid;
+  gap: 5px;
+}
+
+/* Session Screen Composer Wrap */
+.chat-input-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem;
+
+  /* Scrim: dissolves the message list into the page background as it scrolls
+     under the floating composer. Built on the real --pintra-bg (not a black
+     overlay) so it fades cleanly in every theme, and rendered as a pseudo so it
+     can animate — a gradient set on `background` can't be transitioned. It
+     reaches above the wrap for a longer, softer dissolve. */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: -2.5rem;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s var(--pintra-ease-out);
+    background: linear-gradient(
+      to top,
+      var(--pintra-bg) 0%,
+      color-mix(in srgb, var(--pintra-bg) 92%, transparent) 45%,
+      color-mix(in srgb, var(--pintra-bg) 55%, transparent) 74%,
+      transparent 100%
+    );
+  }
+}
+
+.chat-input-scrolled::before {
+  opacity: 1;
+}

@@ -1,0 +1,12 @@
+/* Header */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px var(--pintra-space-md);
+  border-bottom: 1px solid var(--pintra-border);
+  background: var(--pintra-bg);
+  flex-shrink: 0;
+  min-height: calc(var(--pintra-header-height) - 11px);
+  user-select: none;
+}

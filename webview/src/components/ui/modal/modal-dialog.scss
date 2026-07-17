@@ -1,0 +1,70 @@
+/* Confirmation dialog */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--pintra-bg) 52%, transparent);
+  backdrop-filter: blur(3px) saturate(1.1);
+  -webkit-backdrop-filter: blur(3px) saturate(1.1);
+  animation: confirm-fade-in 0.15s ease both;
+}
+
+.modal-dialog {
+  box-sizing: border-box;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  padding: 20px;
+  border: 1px solid
+    color-mix(in srgb, var(--pintra-border-strong) 62%, transparent);
+  border-radius: var(--pintra-radius-md);
+  background: var(--pintra-surface-elevated);
+  box-shadow:
+    var(--pintra-shadow-lg),
+    inset 0 1px var(--pintra-highlight);
+  animation: confirm-enter 0.2s var(--pintra-ease-out) both;
+}
+
+.modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--pintra-fg);
+  margin-bottom: 10px;
+}
+
+.modal-message {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--pintra-fg) 78%, var(--pintra-muted));
+  margin-bottom: 18px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@keyframes confirm-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes confirm-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

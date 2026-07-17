@@ -1,0 +1,135 @@
+/* info dropdown menu items */
+
+.menu-item {
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--pintra-radius);
+  color: var(--pintra-fg);
+  cursor: pointer;
+  display: grid;
+  font-family: inherit;
+  font-size: 0.8em;
+  font-weight: 500;
+  gap: 6px;
+  grid-template-columns: 20px minmax(0, 1fr);
+  min-height: 0;
+  padding: 4px 8px;
+  text-align: left;
+  width: 100%;
+}
+
+.menu-item:hover {
+  background: var(--pintra-list-hover-bg);
+}
+
+.menu-item:not(.disabled):active {
+  background: color-mix(
+    in srgb,
+    var(--pintra-list-hover-bg) 84%,
+    var(--pintra-list-selected-border) 16%
+  );
+}
+
+.menu-item.menu-emphasized {
+  background: color-mix(
+    in srgb,
+    var(--pintra-accent) 10%,
+    var(--pintra-surface-elevated)
+  );
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--pintra-accent) 18%, var(--pintra-border-subtle));
+}
+
+.menu-item.menu-emphasized:hover {
+  background: color-mix(
+    in srgb,
+    var(--pintra-accent) 14%,
+    var(--pintra-list-hover-bg)
+  );
+}
+
+.menu-item:focus-visible {
+  background: var(--pintra-list-hover-bg);
+  box-shadow: inset 0 0 0 1px var(--pintra-focus-ring);
+  outline: none;
+}
+
+.menu-item.menu-emphasized:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--pintra-accent) 14%,
+    var(--pintra-list-hover-bg)
+  );
+  box-shadow:
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--pintra-accent) 24%, var(--pintra-border-subtle)),
+    inset 0 0 0 2px var(--pintra-focus-ring);
+}
+
+.menu-icon {
+  box-shadow: none;
+  color: var(--pintra-secondary-fg);
+  display: inline-flex;
+  height: 18px;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+}
+
+.menu-icon .pi-icon {
+  height: 13px;
+  width: 13px;
+}
+
+.menu-item.menu-emphasized .menu-icon {
+  color: color-mix(in srgb, var(--pintra-accent) 72%, var(--pintra-fg));
+}
+
+.menu-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-item.disabled,
+.menu-item:disabled {
+  color: var(--pintra-muted);
+  cursor: default;
+  opacity: 0.56;
+}
+
+.menu-item.disabled:hover,
+.menu-item:disabled:hover {
+  background: transparent;
+  transform: none;
+}
+
+.menu-item.disabled .menu-icon,
+.menu-item:disabled .menu-icon {
+  color: color-mix(in srgb, var(--pintra-muted) 80%, transparent);
+}
+
+.menu-toggle {
+  grid-template-columns: 20px minmax(0, 1fr) 18px;
+}
+
+.menu-trail {
+  box-shadow: none;
+  color: transparent;
+  display: inline-flex;
+  height: 18px;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+}
+
+.menu-trail .pi-icon {
+  height: 13px;
+  width: 13px;
+}
+
+.menu-trail-on {
+  color: currentColor;
+}

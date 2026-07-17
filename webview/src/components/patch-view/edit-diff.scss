@@ -1,0 +1,68 @@
+.patch-container {
+  font-family: var(--pintra-monospace);
+  font-size: 0.85em;
+  line-height: 1.5;
+  overflow-x: auto;
+  border-radius: 0;
+  font-variation-settings:
+    'MONO' 1,
+    'CASL' 0,
+    'CRSV' 0;
+  background: var(--vscode-editor-background, transparent);
+  color: var(--vscode-editor-foreground, var(--pintra-fg));
+}
+/* per-line diff styling */
+.patch-line {
+  border-left: 2px solid transparent;
+  box-sizing: border-box;
+  min-height: 1.4em;
+  min-width: 100%;
+  overflow-wrap: normal;
+  padding: 2px 8px;
+  white-space: pre;
+  width: max-content;
+  word-break: normal;
+}
+
+.patch-line-context {
+  opacity: 0.55;
+}
+
+.patch-line-del {
+  background: var(
+    --vscode-diffEditor-removedTextBackground,
+    rgba(248, 81, 73, 0.15)
+  );
+  border-left: 2px solid rgba(248, 81, 73, 0.4);
+}
+
+.patch-line-add {
+  background: var(
+    --vscode-diffEditor-insertedTextBackground,
+    rgba(40, 167, 69, 0.15)
+  );
+  border-left: 2px solid rgba(40, 167, 69, 0.4);
+}
+
+/* summary bar above the diff */
+.patch-stats {
+  align-items: center;
+  background: #80808014;
+  border-radius: var(--pintra-radius-sm);
+  color: var(--pintra-muted);
+  column-gap: 8px;
+  display: inline-flex;
+  font-family: var(--pintra-monospace);
+  font-size: 0.82em;
+  margin-bottom: var(--pintra-space-xs);
+  padding: 0.2em 0.55em;
+  user-select: none;
+}
+
+.patch-stats .patch-stat-add {
+  color: var(--vscode-terminal-ansiGreen, #3fb950);
+}
+
+.patch-stats .patch-stat-del {
+  color: var(--vscode-terminal-ansiRed, #f85149);
+}

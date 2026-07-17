@@ -1,0 +1,517 @@
+.exec-block {
+  margin: calc(6px * var(--pintra-spacing-mult)) 0;
+  border: 1px solid transparent;
+  border-radius: var(--pintra-radius);
+  overflow: hidden;
+  font-size: 0.93em;
+  background: transparent;
+  box-shadow: none;
+  transition:
+    border-color var(--pintra-transition-fast) var(--pintra-ease-out),
+    background-color var(--pintra-transition-fast) var(--pintra-ease-out),
+    box-shadow var(--pintra-transition-fast) var(--pintra-ease-out);
+}
+
+.exec-block[open] {
+  border-color: var(--pintra-block-border);
+  background-color: var(--pintra-tool-surface);
+  box-shadow:
+    inset 2px 0 0 var(--pintra-accent-line),
+    var(--pintra-shadow-sm);
+}
+
+.exec-block.error[open] {
+  border-color: var(--pintra-error-border);
+  box-shadow:
+    inset 2px 0 0 var(--pintra-error),
+    var(--pintra-shadow-sm);
+}
+
+/* Joined stacking: collapse adjacent calls */
+.exec-block.exec-joined-prev {
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(-8px * var(--pintra-spacing-mult));
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  box-shadow: none;
+}
+
+body.spacing-compact .exec-block.exec-joined-prev {
+  margin-top: -4px;
+}
+
+.exec-block.exec-joined-next {
+  position: relative;
+  margin-bottom: 0;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: none;
+}
+
+.exec-block.exec-joined-prev,
+.exec-block.exec-joined-next {
+  border-color: transparent;
+  background-image: none;
+}
+
+.exec-block.exec-joined-prev > .exec-header,
+.exec-block.exec-joined-prev > .exec-content-wrap {
+  overflow: hidden;
+}
+
+.exec-block.exec-joined-prev[open]:not(.is-collapsing):not(.exec-focused),
+.exec-block.exec-joined-next[open]:not(.is-collapsing):not(.exec-focused) {
+  border-color: transparent;
+}
+
+/* Summary bar */
+.exec-header {
+  --pintra-tool-summary-control-height: 20px;
+  --pintra-tool-summary-label-size: 0.92rem;
+  background: transparent;
+  box-shadow: none;
+  padding: 8px 10px;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  user-select: none;
+  font-size: var(--pintra-tool-summary-label-size);
+  line-height: var(--pintra-line-body);
+  white-space: nowrap;
+  overflow: visible;
+  list-style: none;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  border: none;
+}
+
+.exec-header > * {
+  align-self: center;
+}
+
+.exec-header .exec-name,
+.exec-header .file-ref,
+.exec-header .exec-write-line,
+.exec-header .exec-args,
+.exec-header .tool-duration,
+.exec-header .exec-edit-counts,
+.exec-header .exec-edit-view {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--pintra-tool-summary-control-height);
+  font-size: var(--pintra-tool-summary-label-size);
+  line-height: var(--pintra-line-body);
+  overflow: visible;
+}
+
+.exec-header .file-ref {
+  font-family: var(--pintra-font);
+}
+
+/* Summary hover when closed */
+.exec-block:not(.exec-noexpand):not(.pending):not([open]) > .exec-header:hover {
+  background: color-mix(in srgb, var(--pintra-surface-hover) 64%, transparent);
+}
+
+/* Summary background when open */
+.exec-block[open]:not(.is-collapsing) > .exec-header {
+  background: color-mix(
+    in srgb,
+    var(--pintra-tool-surface) 92%,
+    var(--pintra-surface-elevated)
+  );
+  box-shadow: none;
+  border-bottom: 1px solid var(--pintra-block-divider);
+}
+
+.exec-header::-webkit-details-marker {
+  display: none;
+}
+
+/* Cursor rules based on expandability */
+.exec-block.exec-noexpand > .exec-header {
+  cursor: default;
+}
+
+.exec-block.pending > .exec-header {
+  cursor: default;
+}
+
+.exec-block:not(.exec-noexpand):not(.pending) > .exec-header,
+.exec-block:not(.exec-noexpand):not(.pending) > .exec-header * {
+  cursor: pointer;
+}
+
+.exec-block:not(.exec-noexpand):not(.pending)
+  > .exec-header
+  :is(button, a, [role='button']) {
+  cursor: pointer;
+}
+
+/* Hidden content for non-expandable */
+.exec-block.exec-noexpand .exec-content {
+  display: none;
+}
+
+.exec-block[open]:not(.is-collapsing) .exec-type-node:before {
+  background: transparent;
+}
+
+/* Type icon */
+.exec-type-icon {
+  position: relative;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  color: var(--pintra-fg-muted);
+  opacity: 0.85;
+  flex-shrink: 0;
+  display: block;
+}
+
+.exec-block[open] .exec-type-icon {
+  color: var(--pintra-accent);
+  opacity: 1;
+}
+
+.exec-block.error .exec-type-icon,
+.exec-block.error[open] .exec-type-icon {
+  color: var(--pintra-error);
+}
+
+/* Tool name label */
+.exec-name {
+  font-weight: 550;
+  color: var(--pintra-fg-muted);
+  flex-shrink: 0;
+  letter-spacing: var(--pintra-tracking-tight);
+}
+
+/* Summary text (file path, argument, etc.) */
+.exec-summary-text {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--pintra-fg);
+  font-family: var(--pintra-monospace);
+  font-variation-settings: 'MONO' 1;
+}
+
+/* Disclosure chevron */
+.exec-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--pintra-fg-faint);
+  transition: color var(--pintra-transition-fast);
+}
+
+.exec-chevron svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--pintra-transition-fast) var(--pintra-ease-out);
+}
+
+.exec-block[open] .exec-chevron svg {
+  transform: rotate(90deg);
+}
+
+body.animations-disabled .exec-chevron svg {
+  transition: none;
+}
+
+.exec-header:hover .exec-chevron {
+  color: var(--pintra-muted);
+}
+
+.exec-block .exec-header {
+  color: var(--pintra-fg);
+}
+
+/* Args and code resets */
+.exec-args,
+.exec-header code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+}
+
+.exec-header .exec-args {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  min-height: var(--pintra-tool-summary-control-height);
+  font-size: var(--pintra-tool-summary-label-size);
+  line-height: var(--pintra-line-body);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.exec-header .exec-args-text {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-overflow: '...';
+  white-space: pre;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  line-height: var(--pintra-line-body);
+}
+
+.exec-bash .exec-args .exec-cmd {
+  color: var(--pintra-fg);
+  font-weight: 600;
+}
+
+.exec-bash .exec-args {
+  color: var(--pintra-fg);
+}
+
+.exec-output code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+/* Content area when open */
+.exec-block[open]:not(.is-collapsing) > .exec-content-wrap > .exec-content {
+  background: var(--pintra-tool-content-surface);
+}
+
+/* Content base */
+.exec-content {
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  outline: none;
+}
+
+.exec-content:focus,
+.exec-content:focus-visible {
+  outline: none;
+}
+
+.exec-block.is-scroll-focused .exec-content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Monospace font for code and output blocks */
+.exec-content :is(pre, code, samp, kbd),
+.exec-content :is(pre, code, samp, kbd) *,
+.exec-content
+  :is(
+    .exec-output,
+    .exec-read,
+    .patch-container,
+    .patch-line,
+    .exec-write-stream
+  ),
+.exec-content
+  :is(.exec-output, .exec-read, .patch-container, .patch-line, .exec-write-stream)
+  * {
+  font-family: var(--pintra-monospace);
+}
+
+.exec-has-image .exec-content {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Animated collapsible wrapper (grid-row technique) */
+.exec-block > .exec-content-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--pintra-transition-slow)
+    var(--pintra-ease-out);
+}
+
+.exec-block[open] > .exec-content-wrap {
+  grid-template-rows: 1fr;
+}
+
+body.animations-disabled .exec-block > .exec-content-wrap {
+  transition: none;
+}
+
+/* Clip layer for collapse */
+.exec-block > .exec-content-wrap > .exec-content {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Scrollable output container */
+.exec-scroll {
+  max-height: min(340px, 55vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  opacity: 0;
+  transition: opacity var(--pintra-transition-fast) var(--pintra-ease-out);
+}
+
+.exec-block[open] .exec-scroll {
+  opacity: 1;
+}
+
+body.animations-disabled .exec-scroll {
+  opacity: 1;
+  transition: none;
+}
+
+/* Edit tool scroll override */
+.exec-block.exec-edit[open]:is(.is-scroll-focused, :focus-within)
+  > .exec-content-wrap
+  > .exec-content {
+  overflow-y: hidden;
+}
+
+.exec-block.exec-edit[open] > .exec-content-wrap > .exec-content {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Toggle animation variant */
+.exec-block.exec-toggle-anim > .exec-content-wrap {
+  display: block;
+  overflow: hidden;
+  transition: height 0.24s var(--pintra-ease-out);
+}
+
+.exec-block.exec-toggle-anim > .exec-content-wrap > .exec-content {
+  overflow: hidden;
+}
+
+body:not(.animations-disabled)
+  .exec-block.exec-toggle-anim.is-opening
+  > .exec-content-wrap
+  > .exec-content {
+  animation: exec-fade 0.2s ease 80ms both;
+}
+
+/* Image content overflow */
+.exec-block.exec-has-image > .exec-content-wrap > .exec-content,
+.exec-block.exec-has-image[open] > .exec-content-wrap > .exec-content {
+  overflow: visible;
+  max-height: none;
+}
+
+/* Write diff border radius reset */
+.exec-block.exec-write
+  > .exec-content-wrap
+  > .exec-content:has(.patch-container.patch-additions-only)
+  .patch-container,
+.exec-block.exec-write[open]
+  > .exec-content-wrap
+  > .exec-content:has(.patch-container.patch-additions-only)
+  .patch-container {
+  border-radius: 0;
+}
+
+/* Pending write streaming height */
+.exec-block.exec-write.pending .exec-write-stream {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Output block */
+.exec-output {
+  margin: 0;
+  padding: 10px 12px 12px;
+  border-radius: 0;
+  font-family: var(--pintra-monospace);
+  font-size: 0.9em;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+.exec-bash-out {
+  font-family: var(--pintra-monospace);
+  color: var(--pintra-fg) !important;
+}
+
+/* ANSI styling */
+.exec-output .ansi-bold {
+  font-weight: 700;
+}
+
+.exec-output .ansi-fg-default {
+  color: var(--pintra-fg);
+}
+
+.exec-output .ansi-fg-dim,
+.exec-output .ansi-fg-muted {
+  color: var(--pintra-muted);
+}
+
+.exec-output .ansi-fg-accent {
+  color: var(--pintra-accent);
+}
+
+.exec-output .ansi-fg-warning {
+  color: var(--pintra-warning);
+}
+
+.exec-output .ansi-fg-error {
+  color: var(--pintra-error);
+}
+
+.exec-output .ansi-fg-success {
+  color: var(--pintra-success);
+}
+
+/* State-specific summary overrides */
+.exec-block.pending .exec-header,
+.exec-block.success .exec-header,
+.exec-block.stopped .exec-header {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+.exec-block.error .exec-header {
+  background: var(--pintra-error-bg);
+}
+
+/* Edit/write hover when closed */
+.exec-block.exec-edit:not(.exec-noexpand):not(.pending):not([open])
+  > .exec-header:hover,
+.exec-block.exec-write:not(.exec-noexpand):not(.pending):not([open])
+  > .exec-header:hover {
+  background: color-mix(in srgb, var(--pintra-surface-hover) 64%, transparent);
+}
+
+@keyframes exec-fade {
+  0% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

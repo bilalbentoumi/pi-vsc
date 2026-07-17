@@ -1,0 +1,42 @@
+.logo-text {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  font-family: 'Pintra Pixel', ui-monospace, monospace;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.logo-word {
+  display: inline-flex;
+  gap: 10px;
+  perspective: 600px;
+}
+
+.logo-letter {
+  display: inline-block;
+  color: var(--pintra-fg);
+  -webkit-text-stroke: 0.4px currentColor;
+  transform-origin: center top;
+  animation: brand-flip 0.5s var(--pintra-ease-spring) calc(var(--i, 0) * 78ms)
+    backwards;
+}
+
+@keyframes brand-flip {
+  0% {
+    opacity: 0;
+    transform: rotateX(-92deg) translateY(-0.14em);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotateX(0) translateY(0);
+  }
+}

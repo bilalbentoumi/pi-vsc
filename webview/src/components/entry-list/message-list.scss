@@ -1,0 +1,89 @@
+#chat-log {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  width: 100%;
+  min-width: 0;
+  max-width: 900px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: calc(8px * var(--pintra-spacing-mult)) 16px 160px;
+  position: relative;
+  transition:
+    opacity 0.18s ease,
+    transform 0.22s var(--pintra-ease-out),
+    padding-bottom 0.26s var(--pintra-ease-out);
+}
+
+/* One turn = a user message + the reply that follows it. It's the containing
+   block for that user bubble's sticky pin, which confines the pin to this turn:
+   as the next turn scrolls up it pushes the previous pinned bubble out of view
+   and takes its place, rather than the bubbles piling up at the top. */
+.turn {
+  display: block;
+}
+
+.welcome {
+  /* Fill the scroll area so the logo can pin to the top while the tagline
+     centers in the full height, ignoring #chat-log's bottom scroll padding. */
+  position: absolute;
+  inset: 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.welcome-logo {
+  position: absolute;
+  top: clamp(32px, 8vh, 72px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pintra-space-xs);
+}
+
+.welcome-version {
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--pintra-muted);
+  letter-spacing: 2px;
+}
+
+.welcome-sub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2 * var(--pintra-space-lg));
+  max-width: 280px;
+  margin: 0;
+  text-align: center;
+  font-size: 0.94em;
+  color: var(--pintra-muted);
+}
+
+.notice-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--pintra-space-sm) var(--pintra-space-md);
+  margin: calc(var(--pintra-space-sm) * var(--pintra-spacing-mult)) 0;
+  font-size: 0.85em;
+  background: var(--pintra-info-bg);
+  color: var(--pintra-fg);
+  border-radius: var(--pintra-radius-sm);
+}
+
+.notice-msg.compact-msg {
+  background: var(--pintra-surface-subtle);
+  border: 1px solid var(--pintra-border-subtle);
+  border-left: 2px solid var(--pintra-accent-line);
+  border-radius: var(--pintra-radius-sm);
+  margin: calc(4px * var(--pintra-spacing-mult)) 0;
+}
+
+.notice-msg.compact-msg .pi-icon {
+  color: var(--pintra-muted);
+}

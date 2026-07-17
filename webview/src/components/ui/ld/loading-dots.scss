@@ -1,0 +1,165 @@
+/* retro-style animated dot indicators */
+
+.ld {
+  align-items: center;
+  column-gap: inherit;
+  display: inline-flex;
+  line-height: 0;
+  vertical-align: middle;
+  color: currentColor;
+}
+
+.ld-dot {
+  background: currentColor;
+  display: inline-block;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* — size presets — */
+
+.ld-sm {
+  gap: 2px;
+}
+
+.ld-sm .ld-dot {
+  height: 2px;
+  width: 2px;
+}
+
+.ld-md {
+  gap: 3px;
+}
+
+.ld-md .ld-dot {
+  height: 3px;
+  width: 3px;
+}
+
+.ld-lg {
+  gap: 5px;
+}
+
+.ld-lg .ld-dot {
+  height: 5px;
+  width: 5px;
+}
+
+/* — pulse variant — */
+
+.ld-pulse .ld-dot {
+  animation: ld-pulse-kf 1.2s steps(1, end) infinite;
+}
+
+.ld-pulse .ld-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.ld-pulse .ld-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ld-pulse .ld-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* — march variant — */
+
+.ld-march .ld-dot {
+  animation: ld-march-kf 0.6s steps(1, end) infinite;
+}
+
+.ld-march .ld-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.ld-march .ld-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.ld-march .ld-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* — bounce variant — */
+
+.ld-bounce .ld-dot {
+  animation: ld-bounce-kf 0.8s steps(1, end) infinite;
+}
+
+.ld-bounce .ld-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.ld-bounce .ld-dot:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.ld-bounce .ld-dot:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* — coin variant (single spinning dot) — */
+
+.ld-coin .ld-dot {
+  animation: ld-coin-kf 0.6s steps(1, end) infinite;
+}
+
+.ld-coin .ld-dot:nth-child(n + 2) {
+  display: none;
+}
+
+/* — keyframes — */
+
+@keyframes ld-pulse-kf {
+  0%,
+  40%,
+  100% {
+    opacity: 0.15;
+  }
+
+  10%,
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes ld-march-kf {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ld-bounce-kf {
+  0%,
+  40%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+
+  10%,
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes ld-coin-kf {
+  0%,
+  50%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  25% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}

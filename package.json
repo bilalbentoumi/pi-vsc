@@ -1,0 +1,243 @@
+{
+	"name": "pi-vsc",
+	"displayName": "Pintra — Pi Agent for VS Code",
+	"description": "AI coding agent for VS Code, powered by the pi runtime.",
+	"version": "1.0.0",
+	"publisher": "bilalbentoumi",
+	"private": true,
+	"icon": "media/icon.png",
+	"galleryBanner": {
+		"color": "#101010",
+		"theme": "dark"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bilalbentoumi/pintra.git"
+	},
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.90.0"
+	},
+	"categories": [
+		"AI",
+		"Chat",
+		"Machine Learning",
+		"Other"
+	],
+	"keywords": [
+		"ai",
+		"ai-agent",
+		"coding-agent",
+		"assistant",
+		"chat",
+		"pi",
+		"pi-agent"
+	],
+	"main": "./dist/extension.js",
+	"activationEvents": [
+		"onView:pintra.chatView"
+	],
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "pintra-container",
+					"title": "Pintra",
+					"icon": "media/activity-bar-icon.svg"
+				}
+			]
+		},
+		"views": {
+			"pintra-container": [
+				{
+					"type": "webview",
+					"id": "pintra.chatView",
+					"name": "Pintra"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "pintra.newChat",
+				"title": "New Chat",
+				"category": "Pintra",
+				"icon": "$(add)"
+			},
+			{
+				"command": "pintra.switchModel",
+				"title": "Switch Model",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.cycleModel",
+				"title": "Cycle Model",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.cycleThinkingLevel",
+				"title": "Cycle Thinking Level",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.compact",
+				"title": "Compact Context",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.abort",
+				"title": "Stop Agent",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.focusInput",
+				"title": "Focus Chat Input",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.addFileToChat",
+				"title": "Add File to Pintra Chat",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.restartRuntime",
+				"title": "Restart Runtime",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.showLog",
+				"title": "Show Log",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.openChatInEditor",
+				"title": "Open Chat in Editor",
+				"category": "Pintra",
+				"icon": "$(split-horizontal)"
+			},
+			{
+				"command": "pintra.editMessage",
+				"title": "Edit a Previous Message",
+				"category": "Pintra"
+			},
+			{
+				"command": "pintra.exportChat",
+				"title": "Export Chat to HTML...",
+				"category": "Pintra"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "pintra.addFileToChat",
+					"when": "resourceScheme == file",
+					"group": "navigation@100"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "pintra.focusInput",
+				"key": "ctrl+shift+i",
+				"mac": "cmd+shift+i"
+			},
+			{
+				"command": "pintra.newChat",
+				"key": "ctrl+shift+alt+n",
+				"mac": "cmd+shift+alt+n"
+			}
+		],
+		"configuration": {
+			"title": "Pintra",
+			"properties": {
+				"pintra.binaryPath": {
+					"type": "string",
+					"default": "pi",
+					"order": 0,
+					"scope": "machine",
+					"markdownDescription": "Command name or absolute path of the external pi-compatible agent executable (for example `pi` or `omp`). Runs in RPC mode. **Changing this restarts the runtime.** Scoped to machine so a workspace's `.vscode/settings.json` cannot override it (security: this value is used to spawn a child process)."
+				},
+				"pintra.agentDir": {
+					"type": "string",
+					"default": "",
+					"order": 1,
+					"scope": "machine",
+					"markdownDescription": "Directory where the pi runtime stores auth, models, and sessions. Defaults to the runtime's own default (`~/.pi/agent`). Passed as `PI_CODING_AGENT_DIR`. Scoped to machine so a workspace cannot redirect it."
+				},
+				"pintra.defaultModel": {
+					"type": "string",
+					"default": "",
+					"order": 2,
+					"markdownDescription": "Optional default model pattern passed to the runtime at startup (for example `anthropic/claude-sonnet-5` or `provider/id:thinking`). Leave empty to use the runtime's configured default."
+				},
+				"pintra.thinkingLevel": {
+					"type": "string",
+					"enum": [
+						"off",
+						"minimal",
+						"low",
+						"medium",
+						"high",
+						"xhigh"
+					],
+					"default": "medium",
+					"order": 3,
+					"markdownDescription": "Default thinking level for model responses."
+				},
+				"pintra.autoCompact": {
+					"type": "boolean",
+					"default": true,
+					"order": 4,
+					"markdownDescription": "Automatically compact context when the conversation grows large."
+				},
+				"pintra.autoRetry": {
+					"type": "boolean",
+					"default": true,
+					"order": 5,
+					"markdownDescription": "Automatically retry on transient provider errors (rate limits, timeouts)."
+				},
+				"pintra.extraArgs": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"order": 6,
+					"scope": "machine",
+					"markdownDescription": "Additional command-line arguments passed to the pi runtime at startup. Scoped to machine so a workspace cannot inject args."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"build": "node esbuild.mjs",
+		"watch": "node esbuild.mjs --watch",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"package": "npm run typecheck && node esbuild.mjs --production && npx vsce package --no-dependencies",
+		"vscode:prepublish": "node esbuild.mjs --production",
+		"vscode:install": "code --install-extension \"$(ls -t pi-vsc-*.vsix | head -1)\"",
+		"format": "npx prettier --write"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.0",
+		"@types/react": "^18.3.12",
+		"@types/react-dom": "^18.3.1",
+		"@types/vscode": "^1.90.0",
+		"esbuild": "^0.24.0",
+		"sass": "^1.101.0",
+		"typescript": "^5.7.2",
+		"vitest": "^4.1.10"
+	},
+	"dependencies": {
+		"@lobehub/icons-static-svg": "^1.91.0",
+		"highlight.js": "^11.10.0",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-icons": "^5.7.0",
+		"react-markdown": "^9.0.1",
+		"rehype-highlight": "^7.0.1",
+		"remark-gfm": "^4.0.0",
+		"zustand": "^5.0.14"
+	}
+}

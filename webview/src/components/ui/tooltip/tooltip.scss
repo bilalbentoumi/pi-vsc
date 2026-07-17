@@ -1,0 +1,11 @@
+/* Tooltip — hover-triggered popover surface. Rich content sizes itself; plain
+   text is constrained and padded via .tooltip-text. */
+.tooltip-text {
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 6px 9px;
+  font-size: 0.82em;
+  line-height: 1.4;
+  color: var(--pintra-fg);
+  white-space: normal;
+  word-break: break-word;
+}
