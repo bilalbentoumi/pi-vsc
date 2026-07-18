@@ -7,6 +7,7 @@ import { useChatDispatch, useChatState } from '../../../contexts/chat-context';
 import { useSlashCommands } from '../../../hooks/use-slash-commands';
 import type { SlashCommand } from '../cmd-menu';
 import { CommandMenu } from '../cmd-menu';
+import { openProviderLogin } from '../../../stores/provider-login-store';
 import { IconButton } from '../../ui/button';
 import { ContextMeter } from '../ctx-meter';
 import { ModelPicker } from '../model-picker';
@@ -80,6 +81,10 @@ export const InputBar = forwardRef<HTMLTextAreaElement, {}>(
             break;
           case 'compact':
             actions.compact();
+            setInput('');
+            break;
+          case 'login':
+            openProviderLogin();
             setInput('');
             break;
           default:

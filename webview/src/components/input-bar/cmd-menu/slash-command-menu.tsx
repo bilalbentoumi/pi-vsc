@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { LuCornerDownLeft, LuSlash } from 'react-icons/lu';
+import { LuCornerDownLeft } from 'react-icons/lu';
 import type { CommandInfo } from '../../../../../shared/protocol';
 import { fuzzyHighlight } from '../../../utils/fuzzy-highlight';
 import './slash-command-menu.scss';
@@ -101,9 +101,6 @@ export function CommandMenu({
             className={`cmd-item${idx === focused ? ' focused' : ''}`}
             onMouseDown={handleMouseDown(cmd)}
             onMouseEnter={() => onHover(idx)}>
-            <span className="cmd-item-glyph">
-              <LuSlash size={13} />
-            </span>
             <span className="cmd-item-body">
               <span className="cmd-item-name">
                 <span className="cmd-item-slash">/</span>

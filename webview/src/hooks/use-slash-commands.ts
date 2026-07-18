@@ -21,6 +21,11 @@ const BUILTIN_COMMANDS: CommandInfo[] = [
     source: 'built-in',
   },
   { name: 'think', description: 'Set thinking level', source: 'built-in' },
+  {
+    name: 'login',
+    description: 'Sign in to a model provider',
+    source: 'built-in',
+  },
 ];
 
 interface UseSlashCommandsOptions {
@@ -69,8 +74,17 @@ export function useSlashCommands({
   }, [value]);
 
   const query = match?.query ?? '';
-  // Use runtime commands, or fall back to built-in commands
-  const availableCommands = commands.length > 0 ? commands : BUILTIN_COMMANDS;
+  // Merge runtime commands with the built-ins the webview handles itself
+  // (e.g. `/login`, `/clear`), so those stay available even once the runtime
+  // supplies its own list. Runtime entries win on name collisions.
+  const availableCommands = useMemo<CommandInfo[]>(() => {
+    if (commands.length === 0) return BUILTIN_COMMANDS;
+    const seen = new Set(commands.map((c) => c.name.replace(/^\/+/, '')));
+    const extras = BUILTIN_COMMANDS.filter(
+      (c) => !seen.has(c.name.replace(/^\/+/, '')),
+    );
+    return [...commands, ...extras];
+  }, [commands]);
   const visible = match !== null;
 
   // Filter and enrich commands

@@ -43,18 +43,6 @@ body.animations-disabled .cmd-menu {
   }
 }
 
-.cmd-item-glyph {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--pintra-radius);
-  background: color-mix(in srgb, var(--pintra-accent) 12%, transparent);
-  color: var(--pintra-accent);
-}
-
 .cmd-item-body {
   flex: 1;
   min-width: 0;
