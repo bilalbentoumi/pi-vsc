@@ -17,7 +17,7 @@ import { useChatState } from '../../../contexts/chat-context';
 import { openProviderLogin } from '../../../stores/provider-login-store';
 import { MenuItem, DropdownItem } from '../../ui/menu-item';
 
-const REPO_URL = 'https://github.com/bilalbentoumi/pintra';
+const REPO_URL = 'https://github.com/bilalbentoumi/pi-vsc';
 
 export function SettingsMenu() {
   const { session } = useChatState();
