@@ -2,7 +2,7 @@
 	"name": "pi-vsc",
 	"displayName": "Pintra — Pi Agent for VS Code",
 	"description": "AI coding agent for VS Code, powered by the pi runtime.",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "bilalbentoumi",
 	"private": true,
 	"icon": "media/icon.png",
