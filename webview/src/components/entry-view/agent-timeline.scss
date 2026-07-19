@@ -1,0 +1,172 @@
+/* Agent turn rendered as a vertical timeline: a rail runs down a left gutter
+   with a node marking every step — reasoning, tool call, and reply text. */
+.agent-timeline {
+  --tl-gutter: 26px;
+  --tl-dot: 7px;
+  --tl-line: 1.5px;
+  /* Distance from an item's top to its dot centre. Overridden per node kind so
+     each dot lands next to the first line of that node's content. */
+  --tl-dot-y: 10px;
+  --tl-gap: 8px;
+
+  display: block;
+  margin: calc(var(--pintra-space-lg) * var(--pintra-spacing-mult)) 0;
+  line-height: 1.7;
+  min-width: 0;
+}
+
+.tl-item {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+/* Left gutter: hosts the dot and draws the connecting line behind it. */
+.tl-rail {
+  position: relative;
+  flex: 0 0 var(--tl-gutter);
+}
+
+.tl-rail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--tl-line);
+  transform: translateX(-50%);
+  background: var(--pintra-border);
+}
+
+/* Trim the rail so it starts at the first dot and ends at the last one. */
+.tl-item:first-child .tl-rail::before {
+  top: var(--tl-dot-y);
+}
+
+.tl-item:last-child .tl-rail::before {
+  bottom: auto;
+  height: var(--tl-dot-y);
+}
+
+.tl-item:only-child .tl-rail::before {
+  display: none;
+}
+
+.tl-dot {
+  position: absolute;
+  top: var(--tl-dot-y);
+  left: 50%;
+  width: var(--tl-dot);
+  height: var(--tl-dot);
+  border-radius: var(--pintra-radius-pill);
+  background: var(--pintra-muted);
+  transform: translate(-50%, -50%);
+  /* Page-coloured ring so the rail appears to pass behind the node. */
+  box-shadow: 0 0 0 3px var(--pintra-bg);
+  z-index: 1;
+}
+
+.tl-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-bottom: var(--tl-gap);
+}
+
+/* The rail owns vertical rhythm — drop the blocks' own outer margins and keep
+   their first line snug against the dot. */
+.tl-body> :first-child {
+  margin-top: 0;
+}
+
+.tl-body> :last-child {
+  margin-bottom: 0;
+}
+
+.tl-body .reasoning-block,
+.tl-body .exec-block {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Per-kind dot alignment + colour ------------------------------------------ */
+
+/* Reply text — the agent's phosphor marker. */
+.tl-text .tl-dot,
+.tl-caret .tl-dot {
+  background: var(--pintra-accent);
+  box-shadow:
+    0 0 0 3px var(--pintra-bg),
+    0 0 8px var(--pintra-accent-glow);
+}
+
+/* Reasoning — a hollow node, quieter than an action. */
+.tl-thinking .tl-dot {
+  background: var(--pintra-bg);
+  box-shadow:
+    0 0 0 3px var(--pintra-bg),
+    inset 0 0 0 1.5px var(--pintra-muted);
+}
+
+/* Tool calls sit lower to meet their header row. */
+.tl-tool {
+  --tl-dot-y: 20px;
+}
+
+.tl-tool.tl-done .tl-dot {
+  background: var(--pintra-success);
+}
+
+.tl-tool.tl-error .tl-dot {
+  background: var(--pintra-error);
+}
+
+.tl-tool.tl-running .tl-dot {
+  background: var(--pintra-accent);
+}
+
+/* Pulse while a tool is in flight. */
+.tl-tool.tl-running .tl-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--pintra-accent);
+  animation: tl-pulse 1.4s var(--pintra-ease-out) infinite;
+}
+
+body.animations-disabled .tl-tool.tl-running .tl-dot::after {
+  animation: none;
+}
+
+.tl-system .tl-dot {
+  background: var(--pintra-warning);
+}
+
+/* Blinking caret shown while a reply is still empty (keyframes live in
+   message-view.scss). */
+.tl-caret .caret-blink {
+  display: inline-block;
+  width: 7px;
+  height: 1.05em;
+  border-radius: 1px;
+  background: var(--pintra-accent);
+  vertical-align: text-bottom;
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+
+body.animations-disabled .tl-caret .caret-blink {
+  animation: none;
+}
+
+@keyframes tl-pulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}

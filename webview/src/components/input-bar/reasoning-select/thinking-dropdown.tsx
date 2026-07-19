@@ -6,12 +6,12 @@ import {
 } from '../../../constants/thinking-level';
 import { useChatState } from '../../../contexts/chat-context';
 import { Button } from '../../ui/button';
-import { MenuItem, DropdownItem } from '../../ui/menu-item';
+import { Menu, MenuItem } from '../../ui/menu-item';
 
 export function ReasoningSelect() {
   const value = useChatState().thinkingLevel;
 
-  const items: DropdownItem[] = THINKING_LEVELS.map((level) => ({
+  const items: MenuItem[] = THINKING_LEVELS.map((level) => ({
     label: LEVEL_LABELS[level] ?? level,
     icon:
       level === 'off'
@@ -27,7 +27,7 @@ export function ReasoningSelect() {
   const currentLabel = LEVEL_LABELS[value] ?? value;
 
   return (
-    <MenuItem
+    <Menu
       items={items.reverse()}
       triggerIcon={value === 'off' ? LuPower : LuBrain}
       label={`Thinking: ${currentLabel}`}

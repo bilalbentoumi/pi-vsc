@@ -1,7 +1,8 @@
 .entry {
   display: block;
   line-height: 1.7;
-  margin: calc(var(--pintra-space-lg) * var(--pintra-spacing-mult)) 0;
+  margin-top: calc(var(--pintra-space-lg) * var(--pintra-spacing-mult)) 0;
+  margin-bottom: 15px;
   padding-top: 10px;
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useChatState } from '../../contexts/chat-context';
-import { EntryView } from '../entry-view';
+import { AgentTimeline, EntryView } from '../entry-view';
 import { LogoText } from '../logo-text';
 import { ProgressBar } from '../progress-bar';
 import type { UiMessage } from '../../store';
@@ -73,13 +73,23 @@ export function EntryList({
           </p>
         </div>
       )}
-      {groupIntoTurns(messages).map((turn) => (
-        <div className="turn" key={turn.key}>
-          {turn.items.map((m) => (
-            <EntryView key={m.uid} message={m} tools={tools} />
-          ))}
-        </div>
-      ))}
+      {groupIntoTurns(messages).map((turn) => {
+        // A turn is [user?, ...agent/system]; the user message stays a bubble
+        // while the reply that follows renders as one continuous timeline.
+        const hasUser = turn.items[0]?.role === 'user';
+        const userMsg = hasUser ? turn.items[0] : null;
+        const agentMsgs = hasUser ? turn.items.slice(1) : turn.items;
+        return (
+          <div className="turn" key={turn.key}>
+            {userMsg && (
+              <EntryView key={userMsg.uid} message={userMsg} tools={tools} />
+            )}
+            {agentMsgs.length > 0 && (
+              <AgentTimeline messages={agentMsgs} tools={tools} />
+            )}
+          </div>
+        );
+      })}
       {streaming && !compacting && <ProgressBar />}
       {compacting && (
         <div className="notice-msg compact-msg">Compacting context…</div>

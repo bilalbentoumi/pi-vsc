@@ -15,7 +15,7 @@ import {
 import { actions } from '../../../apis/actions';
 import { useChatState } from '../../../contexts/chat-context';
 import { openProviderLogin } from '../../../stores/provider-login-store';
-import { MenuItem, DropdownItem } from '../../ui/menu-item';
+import { Menu, MenuItem } from '../../ui/menu-item';
 
 const REPO_URL = 'https://github.com/bilalbentoumi/pi-vsc';
 
@@ -29,7 +29,7 @@ export function SettingsMenu() {
 
   const autoCompactionEnabled = session?.autoCompactionEnabled ?? true;
 
-  const items: DropdownItem[] = [
+  const items: MenuItem[] = [
     {
       label: 'Submit Feedback',
       icon: LuMessageSquareWarning,
@@ -86,5 +86,5 @@ export function SettingsMenu() {
     },
   ];
 
-  return <MenuItem items={items} triggerIcon={LuSettings2} />;
+  return <Menu items={items} triggerIcon={LuSettings2} />;
 }

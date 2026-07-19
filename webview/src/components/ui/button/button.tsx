@@ -3,7 +3,12 @@ import { IconBaseProps } from 'react-icons';
 import './button.scss';
 
 export type ButtonVariant =
-  'ghost' | 'primary' | 'secondary' | 'contained' | 'error' | 'trigger';
+  | 'ghost'
+  | 'primary'
+  | 'secondary'
+  | 'contained'
+  | 'error'
+  | 'trigger';
 export type ButtonSize = 'sm' | 'md';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -29,48 +34,50 @@ const SIZES: Record<ButtonSize, string> = {
   md: 'btn-md',
 };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  {
-    variant = 'ghost',
-    size = 'md',
-    startIcon: StartIcon,
-    endIcon: EndIcon,
-    icon: Icon,
-    iconPosition = 'start',
-    className,
-    children,
-    disabled,
-    type,
-    ...rest
-  },
-  ref,
-) {
-  const classes = [
-    'btn',
-    VARIANTS[variant],
-    SIZES[size],
-    Icon ? 'btn-icon-only' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(
+    {
+      variant = 'ghost',
+      size = 'md',
+      startIcon: StartIcon,
+      endIcon: EndIcon,
+      icon: Icon,
+      iconPosition = 'start',
+      className,
+      children,
+      disabled,
+      type,
+      ...rest
+    },
+    ref,
+  ) {
+    const classes = [
+      'btn',
+      VARIANTS[variant],
+      SIZES[size],
+      Icon ? 'btn-icon-only' : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <button
-      ref={ref}
-      type={type ?? 'button'}
-      className={classes}
-      disabled={disabled}
-      {...rest}>
-      {Icon ? (
-        <Icon className="btn-icon" />
-      ) : (
-        <>
-          {StartIcon && <StartIcon className="btn-icon" />}
-          {children != null && <span>{children}</span>}
-          {EndIcon && <EndIcon className="btn-icon" />}
-        </>
-      )}
-    </button>
-  );
-});
+    return (
+      <button
+        ref={ref}
+        type={type ?? 'button'}
+        className={classes}
+        disabled={disabled}
+        {...rest}>
+        {Icon ? (
+          <Icon className="btn-icon" />
+        ) : (
+          <>
+            {StartIcon && <StartIcon className="btn-icon" />}
+            {children != null && children}
+            {EndIcon && <EndIcon className="btn-icon" />}
+          </>
+        )}
+      </button>
+    );
+  },
+);

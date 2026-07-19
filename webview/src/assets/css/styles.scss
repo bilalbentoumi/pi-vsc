@@ -26,9 +26,9 @@
   padding: 12px 14px;
   overflow-x: auto;
   white-space: pre;
-  /* Anchored on the body bg and pushed toward white so the block always reads
-     as a distinctly lighter surface, in both light and dark themes. */
-  background: color-mix(in srgb, var(--pintra-bg) 72%, #fff);
+  /* Share the user bubble's surface (VS Code's designed input tokens) so code
+     reads as the same material in every theme. */
+  background: var(--vscode-input-background, var(--pintra-surface-subtle));
   border: 1px solid var(--pintra-border-subtle);
   border-radius: var(--pintra-radius);
 }

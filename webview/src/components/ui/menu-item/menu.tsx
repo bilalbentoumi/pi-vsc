@@ -8,9 +8,9 @@ import {
   PopoverSide,
   PopoverTriggerApi,
 } from '../flyout';
-import './dropdown.scss';
+import './menu.scss';
 
-export interface DropdownItem {
+export interface MenuItem {
   label: string;
   icon: ComponentType<IconBaseProps>;
   onSelect: () => void;
@@ -19,8 +19,8 @@ export interface DropdownItem {
   disabled?: boolean;
 }
 
-export interface DropdownProps {
-  items: DropdownItem[];
+export interface MenuProps {
+  items: MenuItem[];
   triggerIcon?: ComponentType<IconBaseProps>;
   label?: string;
   side?: PopoverSide;
@@ -29,7 +29,7 @@ export interface DropdownProps {
   trigger?: (api: PopoverTriggerApi) => React.ReactNode;
 }
 
-export function MenuItem({
+export function Menu({
   items,
   triggerIcon = LuChevronDown,
   label,
@@ -37,7 +37,7 @@ export function MenuItem({
   align = 'center',
   minWidth = 198,
   trigger,
-}: DropdownProps) {
+}: MenuProps) {
   return (
     <Flyout
       side={side}
