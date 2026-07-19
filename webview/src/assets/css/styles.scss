@@ -16,6 +16,49 @@
   padding: 2px 6px;
 }
 
+/* ── Markdown tables ─────────────────────────────────
+   Wrapped in a scrollable container for narrow sidebars;
+   table inherits the code-block surface for consistency. */
+
+.md-table-wrap {
+  overflow-x: auto;
+  margin: 8px 0;
+  border: 1px solid var(--pintra-border-subtle);
+  border-radius: var(--pintra-radius);
+}
+
+.md-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--pintra-type-sm);
+  line-height: var(--pintra-line-body);
+}
+
+.md-table th,
+.md-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--pintra-hairline);
+  white-space: nowrap;
+}
+
+.md-table th {
+  font-weight: 600;
+  font-size: var(--pintra-type-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--pintra-tracking-caps);
+  color: var(--pintra-fg-muted);
+  background: var(--pintra-surface-subtle);
+}
+
+.md-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.md-table tbody tr:hover {
+  background: var(--pintra-surface-raise);
+}
+
 /* ── Markdown code ─────────────────────────────────────
    Fenced blocks preserve whitespace and scroll horizontally inside a
    framed surface; inline code reads as a subtle pill. */

@@ -47,6 +47,16 @@ export const MdRender = memo(function MdRender({ children }: MarkdownProps) {
               </code>
             );
           },
+          table: ({ children }) => (
+            <div className="md-table-wrap">
+              <table className="md-table">{children}</table>
+            </div>
+          ),
+          thead: ({ children }) => <thead>{children}</thead>,
+          tbody: ({ children }) => <tbody>{children}</tbody>,
+          tr: ({ children }) => <tr>{children}</tr>,
+          th: ({ children }) => <th>{children}</th>,
+          td: ({ children }) => <td>{children}</td>,
         }}>
         {children}
       </ReactMarkdown>
