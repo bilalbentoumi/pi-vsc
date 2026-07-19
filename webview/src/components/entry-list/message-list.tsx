@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useChatState } from '../../contexts/chat-context';
 import { AgentTimeline, EntryView } from '../entry-view';
+import { LogoIcon } from '../logo-icon';
 import { LogoText } from '../logo-text';
 import { ProgressBar } from '../progress-bar';
 import type { UiMessage } from '../../store';
@@ -67,10 +68,13 @@ export function EntryList({
               <span className="welcome-version">v{APP_VERSION}</span>
             )}
           </div>
-          <p className="welcome-sub">
-            Ask Pi to build a feature, fix a bug, or explain the code in this
-            workspace.
-          </p>
+          <div className="welcome-tagline">
+            <LogoIcon size={28} className="welcome-glyph" />
+            <p className="welcome-sub">
+              Ask Pi to build a feature, fix a bug, or explain the code in this
+              workspace.
+            </p>
+          </div>
         </div>
       )}
       {groupIntoTurns(messages).map((turn) => {
