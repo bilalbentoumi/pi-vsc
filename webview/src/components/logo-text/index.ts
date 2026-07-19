@@ -1,1 +1,1 @@
-export { LogoText } from './brand-text';
+export { LogoText } from './logo-text';
