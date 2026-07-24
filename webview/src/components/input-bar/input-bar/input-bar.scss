@@ -115,12 +115,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
 }
 
 .input-toolbar-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Hide model picker & reasoning select on narrow widths so the send
+   button always stays visible. */
+.toolbar-hide-narrow {
+  display: contents;
+}
+
+@media (max-width: 480px) {
+  .toolbar-hide-narrow {
+    display: none;
+  }
 }
 
 /* Attachment chips */
