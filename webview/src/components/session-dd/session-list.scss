@@ -2,6 +2,7 @@
   position: fixed;
   z-index: 95;
   max-height: 420px;
+  max-width: min(420px, calc(100vw - 24px));
   overflow-y: auto;
   background: var(--pintra-surface-elevated);
   border: 1px solid var(--pintra-border-subtle);
@@ -111,7 +112,7 @@ body.animations-disabled .session-dd {
   box-shadow: inset 0 0 0 1px var(--pintra-focus-ring);
 }
 .session-dd-row-title {
-  flex: 1 1 auto;
+  flex: 1 1 0%;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

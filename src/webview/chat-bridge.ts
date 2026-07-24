@@ -137,13 +137,24 @@ export class ChatBridge implements vscode.Disposable {
           await this.connect();
           return;
         case 'sendMessage': {
-          // Convert attachments to the ImageContent format expected by the RPC protocol.
-          const rpcImages = message.attachments?.map((a) => ({
-            type: 'image',
-            data: a.data,
-            mimeType: a.mimeType,
-          }));
-          await runtime?.prompt(message.text, rpcImages);
+          // Separate image attachments (passed via `images` in the RPC) from
+          // text-file attachments (inlined into the prompt so the AI can see
+          // them). Non-image entries in `images` are ignored by the pi runtime.
+          let promptText = message.text;
+          const rpcImages: { type: 'image'; data: string; mimeType: string }[] = [];
+          if (message.attachments) {
+            for (const a of message.attachments) {
+              if (a.mimeType.startsWith('image/')) {
+                rpcImages.push({ type: 'image', data: a.data, mimeType: a.mimeType });
+              } else {
+                // Inline text files into the prompt with a clear header.
+                const decoded = Buffer.from(a.data, 'base64').toString('utf8');
+                const fence = '```';
+                promptText += `\n\n<file path="${a.name}">\n${fence}\n${decoded}\n${fence}\n</file>`;
+              }
+            }
+          }
+          await runtime?.prompt(promptText, rpcImages.length > 0 ? rpcImages : undefined);
           return;
         }
         case 'steer':
